@@ -6,22 +6,20 @@ using UnityEngine.EventSystems;
 public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     public TextMeshProUGUI itemNameText;
+    public RectTransform rectTransform;
+    public CanvasGroup canvasGroup;
 
     private ItemData itemData;
-    private RectTransform rectTransform;
-    private CanvasGroup canvasGroup;
     private Vector2 originalPosition;
-
-    private void Awake()
-    {
-        rectTransform = GetComponent<RectTransform>();
-        canvasGroup = GetComponent<CanvasGroup>();
-    }
+    private Canvas mainCanvas;
 
     public void OnBeginDrag(PointerEventData eventData)
     {
         originalPosition = rectTransform.anchoredPosition;
         canvasGroup.blocksRaycasts = false; // 드래그 중일 때 다른 셀의 상호작용을 방해하지 않도록 설정
+
+        transform.SetParent(mainCanvas.transform);
+        transform.SetAsLastSibling(); // 부모 오브젝트 내의 Hiearachy상 가장 아래로 이동
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -40,8 +38,9 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         }
     }
 
-    public void SetItemData(ItemData itemData)
+    public void SetItemData(ItemData itemData, Canvas canvas)
     {
+        this.mainCanvas = canvas;
         this.itemData = itemData;
         UpdateUI();
     }

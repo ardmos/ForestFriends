@@ -1300,6 +1300,7 @@ MonoBehaviour:
   height: 10
   cellPrefab: {fileID: 6111489481296380869, guid: 40e04ae576777034d9b0c23a5025fc56, type: 3}
   itemPrefab: {fileID: 3279631742400161182, guid: 96448ddefb11661459f72d425413c59b, type: 3}
+  mainCanvas: {fileID: 1119499013}
 --- !u!1 &1899728876
 GameObject:
   m_ObjectHideFlags: 0

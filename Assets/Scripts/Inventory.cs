@@ -3,12 +3,13 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
-    private const float CELL_SIZE = 50f;
+    private const float CELL_SIZE = 100f;
 
     public int width = 10; // 인벤토리의 너비
     public int height = 10; // 인벤토리의 높이
     public GameObject cellPrefab; // 셀 프리팹을 할당하는 변수
     public GameObject itemPrefab; // 아이템 프리팹을 할당하는 변수
+    public Canvas mainCanvas;
     
     private InventoryCell[,] cells; // 인벤토리 셀을 저장하는 2차원 배열
     private Vector2 gridOffset; // 그리드가 오브젝트를 중앙에 두고 형성되도록 위치를 보정해주는 변수
@@ -80,7 +81,7 @@ public class Inventory : MonoBehaviour
             // 아이템 UI 정보 초기화
             if (itemObject.TryGetComponent<InventoryItem>(out InventoryItem inventoryItem))
             {
-                inventoryItem.SetItemData(newItemData);
+                inventoryItem.SetItemData(newItemData, mainCanvas);
             }
 
             // InventoryItem 컴포넌트가 있다면 추가 설정을 할 수 있습니다.
