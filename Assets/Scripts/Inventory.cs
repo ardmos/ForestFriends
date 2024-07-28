@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
+    public static Inventory instance;
     private const float CELL_SIZE = 100f;
 
     public int width = 10; // 인벤토리의 너비
@@ -14,8 +15,12 @@ public class Inventory : MonoBehaviour
     private InventoryCell[,] cells; // 인벤토리 셀을 저장하는 2차원 배열
     private Vector2 gridOffset; // 그리드가 오브젝트를 중앙에 두고 형성되도록 위치를 보정해주는 변수
 
+    private void Awake()
+    {
+        instance = this;
+    }
 
-    void Start()
+    private void Start()
     {
         // 인벤토리 그리드와 셀 배열을 초기화
         cells = new InventoryCell[width, height];
@@ -59,7 +64,9 @@ public class Inventory : MonoBehaviour
                 GameObject cellObject = Instantiate(cellPrefab, transform);
                 cellObject.GetComponent<RectTransform>().anchoredPosition = startPosition + new Vector2(x * CELL_SIZE, -y * CELL_SIZE);
                 //Debug.Log($"그리드 셀을 그립니다. cell(x:{x},y{y}), anchoredPos : {cellObject.GetComponent<RectTransform>().anchoredPosition}");
-                cells[x, y] = cellObject.GetComponent<InventoryCell>();
+                InventoryCell cell = cellObject.GetComponent<InventoryCell>();
+                cells[x, y] = cell;
+                cell.cellPos = new Vector2(x, y);
             }
         }
     }
@@ -72,16 +79,14 @@ public class Inventory : MonoBehaviour
 
         if (x >= 0 && x < width && y >= 0 && y < height)
         {
-            // 셀에 아이템 할당
-            cells[x, y].itemData = newItemData;
-
-            // 아이템 프리팹을 인스턴스화하고 셀에 배치
             GameObject itemObject = Instantiate(itemPrefab, cells[x, y].transform);
-            itemObject.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
-            // 아이템 UI 정보 초기화
+
             if (itemObject.TryGetComponent<InventoryItem>(out InventoryItem inventoryItem))
             {
-                inventoryItem.SetItemData(newItemData, mainCanvas);
+                // 해당 셀에 아이템 오브젝트 배치 & 아이템 정보 저장
+                cells[x, y].inventoryCellDragHandler.OnDrop(inventoryItem);
+                // 아이템 UI 정보 초기화
+                inventoryItem.SetItemData(newItemData, mainCanvas, new Vector2(x,y));           
             }
 
             // InventoryItem 컴포넌트가 있다면 추가 설정을 할 수 있습니다.
@@ -98,37 +103,6 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public void ReplaceItem(ItemData moveItemData)
-    {
-        int targetCellPosX = (int)moveItemData.item.targetCellPos.x;
-        int targetCellPosY = (int)moveItemData.item.targetCellPos.y;
-
-        ItemData existingItemData = cells[targetCellPosX, targetCellPosY].itemData;
-
-        // 셀에 이미 아이템이 있을 경우. 위치 교환
-        if (existingItemData != null)
-        {
-            existingItemData = new ItemData()
-            {
-                item = new Item()
-                {
-                    itemName = existingItemData.item.itemName,
-                    currentCellPos = moveItemData.item.currentCellPos,
-                    targetCellPos = moveItemData.item.currentCellPos
-                }
-            };
-        }
-
-        // 새로운 아이템 먼저 배치
-        InstantiateItem(moveItemData);
-
-        // 기존 아이템이 있었을 경우
-        if(existingItemData != null) 
-        {
-            InstantiateItem(existingItemData);
-        }
-    }
-
     public void AddNewItem(ItemData itemData)
     {
         // JSON에 저장
@@ -139,16 +113,16 @@ public class Inventory : MonoBehaviour
     }
 
     /// <summary>
-    /// 튜플로 결과를 구분지어서 반환.
+    /// 새로운 아이템 추가시 비어있는 셀을 찾아주는 메서드 입니다. 튜플로 결과를 구분지어서 반환해줍니다. 
     /// </summary>
-    /// <returns></returns>
+    /// <returns>true 성공, false 실패</returns>
     public (bool success, Vector2 cellPosition) GetEmptyInventoryCellPos()
     {
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
-                if (cells[x,y].itemData == null)
+                if (cells[x,y].occupyingItem == null)
                 {
                     return (true, new Vector2(x,y));
                 }
@@ -156,5 +130,10 @@ public class Inventory : MonoBehaviour
         }
 
         return (false, Vector2.zero);
+    }
+
+    public InventoryCell GetInventoryCellByPos(Vector2 cellPos)
+    {
+        return cells[(int)cellPos.x, (int)cellPos.y];
     }
 }

@@ -3,7 +3,9 @@ using UnityEngine.EventSystems;
 
 public class InventoryCell : MonoBehaviour
 {
-    public ItemData itemData = null; // 현재 셀에 있는 아이템
+    public InventoryItem occupyingItem = null; // 현재 셀에 있는 아이템
+    public InventoryCellDragHandler inventoryCellDragHandler;
+    public Vector2 cellPos = Vector2.zero;
 
     // 하이라이트 기능
     /*// 셀의 배경 이미지를 나타내는 변수
