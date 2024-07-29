@@ -67,8 +67,8 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         return this.itemData;
     }
 
-    private void UpdateUI()
+    public void UpdateUI()
     {
-        itemNameText.text = itemData.item.itemName;
+        itemNameText.text = itemData.item.currentCellPos.ToString(); // itemData.item.itemName;
     }
 }

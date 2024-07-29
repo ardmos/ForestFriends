@@ -14,6 +14,7 @@ public class InventoryCellDragHandler : MonoBehaviour
         draggedItem.transform.localPosition = Vector3.zero;
         inventoryCell.occupyingItem = draggedItem; // 현재 셀에 아이템 정보 저장
         draggedItem.currentCellPos = inventoryCell.cellPos; // 아이템에 저장되는 셀 위치 정보를 업데이트
+        draggedItem.UpdateUI();
     }
 
     // 현 아이템과 draggedItem의 위치를 교환한다

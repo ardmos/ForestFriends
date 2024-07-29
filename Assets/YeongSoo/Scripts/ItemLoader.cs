@@ -38,7 +38,7 @@ public static class ItemLoader
         }
     }
 
-    public static void SaveItemsToJson()
+    private static void SaveItemsToJson()
     {
         ItemDataWrapper wrapper = new ItemDataWrapper { items = itemDataList.ToArray() };
         string json = JsonUtility.ToJson(wrapper, true);
@@ -48,6 +48,24 @@ public static class ItemLoader
     public static void AddItem(ItemData newItem)
     {
         itemDataList.Add(newItem);
+        SaveItemsToJson();
+    }
+
+    public static void SaveAllItems(List<ItemData> newItemDataList)
+    {
+        Debug.Log($"1.아이템리스트 저장중. itemDataList : (");
+        foreach (ItemData item in itemDataList)
+        {
+            Debug.Log($"{item.item.itemName} : {item.item.currentCellPos}");
+        }
+        Debug.Log($")");
+        itemDataList = new List<ItemData>(newItemDataList);
+        Debug.Log($"2.아이템리스트 저장중. new itemDataList : ");
+        foreach (ItemData item in itemDataList)
+        {
+            Debug.Log($"{item.item.itemName} : {item.item.currentCellPos}");
+        }
+        Debug.Log($")");
         SaveItemsToJson();
     }
 

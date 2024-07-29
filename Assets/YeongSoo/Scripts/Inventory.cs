@@ -39,6 +39,21 @@ public class Inventory : MonoBehaviour
 
     }
 
+    private void OnDestroy()
+    {
+        // 씬이 닫힐 때 현재 인벤토리 내 아이템 정보 자동 저장
+        List<ItemData> itemDataList = new List<ItemData>();
+
+        foreach(InventoryCell inventoryCell in cells)
+        {
+            if(inventoryCell.occupyingItem)
+                itemDataList.Add(inventoryCell.occupyingItem.GetItemData());
+        }
+
+        ItemLoader.SaveAllItems(itemDataList);
+        Debug.Log($"인벤토리 OnDestroy! 자동 저장 시작!");
+    }
+
     private void CalculateGridOffset()
     {
         float gridWidth = width * CELL_SIZE;
