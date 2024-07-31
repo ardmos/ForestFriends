@@ -20,12 +20,12 @@ public static class ItemLoader
 
             foreach (ItemData wrapperItem in wrapper.items)
             {
-                Debug.Log($"wrapperItem.item : {wrapperItem.item}");
+                Debug.Log($"wrapperItem : {wrapperItem}");
             }
 
             foreach(ItemData itemData in itemDataList)
             {
-                Debug.Log($"itemDataList.item : {itemData.item}");
+                Debug.Log($"itemDataList : {itemData}");
             }
 
             return itemDataList;
@@ -51,19 +51,19 @@ public static class ItemLoader
         SaveItemsToJson();
     }
 
-    public static void SaveAllItems(List<ItemData> newItemDataList)
+    public static void SaveCurrentInventoryData(List<ItemData> newItemDataList)
     {
-        Debug.Log($"1.아이템리스트 저장중. itemDataList : (");
+        Debug.Log($"1.인벤토리 정보 저장중. itemDataList : (");
         foreach (ItemData item in itemDataList)
         {
-            Debug.Log($"{item.item.itemName} : {item.item.currentCellPos}");
+            Debug.Log($"{item.itemName} : {item.currentCellPos}");
         }
         Debug.Log($")");
         itemDataList = new List<ItemData>(newItemDataList);
-        Debug.Log($"2.아이템리스트 저장중. new itemDataList : ");
+        Debug.Log($"2.인벤토리 정보 저장중. new itemDataList : ");
         foreach (ItemData item in itemDataList)
         {
-            Debug.Log($"{item.item.itemName} : {item.item.currentCellPos}");
+            Debug.Log($"{item.itemName} : {item.currentCellPos}");
         }
         Debug.Log($")");
         SaveItemsToJson();

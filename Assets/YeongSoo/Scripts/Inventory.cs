@@ -50,8 +50,9 @@ public class Inventory : MonoBehaviour
                 itemDataList.Add(inventoryCell.occupyingItem.GetItemData());
         }
 
-        ItemLoader.SaveAllItems(itemDataList);
         Debug.Log($"인벤토리 OnDestroy! 자동 저장 시작!");
+        ItemLoader.SaveCurrentInventoryData(itemDataList);
+        Debug.Log($"인벤토리 OnDestroy! 자동 저장 끝?");
     }
 
     private void CalculateGridOffset()
@@ -88,9 +89,9 @@ public class Inventory : MonoBehaviour
 
     public void InstantiateItem(ItemData newItemData)
     {
-        Debug.Log($"{newItemData.item.itemName}");
-        int x = (int)newItemData.item.currentCellPos.x;
-        int y = (int)newItemData.item.currentCellPos.y;
+        Debug.Log($"InstantiateItem. itemName:{newItemData.itemName}, cellPos:{newItemData.currentCellPos}");
+        int x = (int)newItemData.currentCellPos.x;
+        int y = (int)newItemData.currentCellPos.y;
 
         if (x >= 0 && x < width && y >= 0 && y < height)
         {
@@ -98,10 +99,10 @@ public class Inventory : MonoBehaviour
 
             if (itemObject.TryGetComponent<InventoryItem>(out InventoryItem inventoryItem))
             {
+                // 아이템 정보 설정
+                inventoryItem.SetItemData(newItemData, mainCanvas);
                 // 해당 셀에 아이템 오브젝트 배치 & 아이템 정보 저장
-                cells[x, y].inventoryCellDragHandler.OnDrop(inventoryItem);
-                // 아이템 UI 정보 초기화
-                inventoryItem.SetItemData(newItemData, mainCanvas, new Vector2(x,y));           
+                cells[x, y].inventoryCellDragHandler.OnDrop(inventoryItem);     
             }
 
             // InventoryItem 컴포넌트가 있다면 추가 설정을 할 수 있습니다.

@@ -31,12 +31,9 @@ public class UIManager : MonoBehaviour
 
         ItemData newItemData = new ItemData()
         {
-            item = new Item()
-            {
-                itemName = itemNameInput.text,
-                currentCellPos = searchResult.cellPosition,
-                targetCellPos = Vector2.zero
-            }
+            itemName = itemNameInput.text,
+            currentCellPos = searchResult.cellPosition,
+            targetCellPos = Vector2.zero
         };
 
         inventory.AddNewItem(newItemData);

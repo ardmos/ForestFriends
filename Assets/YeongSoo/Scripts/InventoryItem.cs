@@ -1,6 +1,4 @@
-using JetBrains.Annotations;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -9,7 +7,6 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public TextMeshProUGUI itemNameText;
     public RectTransform rectTransform;
     public CanvasGroup canvasGroup;
-    public Vector2 currentCellPos;
 
     private ItemData itemData;
     private Vector2 originalPosition;
@@ -41,7 +38,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         // 아이템이 존재하는 셀이었을 경우
         else if (eventData.pointerEnter.TryGetComponent<InventoryItem>(out InventoryItem occupyingItem)) 
         {
-            InventoryCellDragHandler occupiedCell =  Inventory.instance.GetInventoryCellByPos(occupyingItem.currentCellPos).inventoryCellDragHandler;
+            InventoryCellDragHandler occupiedCell =  Inventory.instance.GetInventoryCellByPos(occupyingItem.itemData.currentCellPos).inventoryCellDragHandler;
             occupiedCell.OnSwapItems(this);
         }
         // 인벤토리 셀이 아니었을 경우
@@ -49,16 +46,16 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         {
             Debug.Log($"드롭한 위치가 유효하지 않습니다!. 감지된 오브젝트 : {eventData.pointerEnter.gameObject.name}");
             // 드롭한 위치가 유효하지 않으면 원래 위치(currentCellPos)로 돌아감
-            transform.SetParent(Inventory.instance.GetInventoryCellByPos(currentCellPos).transform);
+            transform.SetParent(Inventory.instance.GetInventoryCellByPos(itemData.currentCellPos).transform);
             rectTransform.anchoredPosition = Vector2.zero;
         }
     }
 
-    public void SetItemData(ItemData itemData, Canvas canvas, Vector2 cellPos)
+    public void SetItemData(ItemData itemData, Canvas canvas)
     {
+        Debug.Log($"");
         this.mainCanvas = canvas;
         this.itemData = itemData;
-        this.currentCellPos = cellPos;
         UpdateUI();
     }
 
@@ -69,6 +66,6 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public void UpdateUI()
     {
-        itemNameText.text = itemData.item.currentCellPos.ToString(); // itemData.item.itemName;
+        itemNameText.text = itemData.currentCellPos.ToString(); // itemData.itemName;
     }
 }
