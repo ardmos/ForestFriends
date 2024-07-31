@@ -1,7 +1,7 @@
 {
     "items": [
         {
-            "itemName": "Shield",
+            "itemName": "Sword",
             "currentCellPos": {
                 "x": 0.0,
                 "y": 0.0
@@ -12,10 +12,10 @@
             }
         },
         {
-            "itemName": "Sword",
+            "itemName": "Shield",
             "currentCellPos": {
-                "x": 0.0,
-                "y": 2.0
+                "x": 4.0,
+                "y": 0.0
             },
             "targetCellPos": {
                 "x": 0.0,
