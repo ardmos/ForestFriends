@@ -1,11 +1,21 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+/// <summary>
+/// 인벤토리에 있는 한 개의 셀의 정보를 관리하는 스크립트
+/// </summary>
 public class InventoryCell : MonoBehaviour
 {
-    public InventoryItem occupyingItem = null; // 현재 셀에 있는 아이템
+    private InventoryItem occupyingItem = null; // 현재 셀에 있는 아이템
     public InventoryCellDragHandler inventoryCellDragHandler;
     public Vector2 cellPos = Vector2.zero;
+
+    public InventoryItem GetOccupyingItem() { return occupyingItem; }
+    public void SetOccupyingItem(InventoryItem occupyingItem) 
+    {
+        Debug.Log($"cell:{cellPos}의 occupingItem 데이터가 설정됩니다");
+        this.occupyingItem = occupyingItem; 
+    }
 
     // 하이라이트 기능
     /*// 셀의 배경 이미지를 나타내는 변수

@@ -2,7 +2,10 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class InventoryAddItemManager : MonoBehaviour
+/// <summary>
+/// 인벤토리 아이템 추가 기능을 관리하는 스크립트
+/// </summary>
+public class InventoryItemAdder : MonoBehaviour
 {
     public TMP_InputField itemNameInputField;
     public Button addItemButton;
@@ -15,6 +18,7 @@ public class InventoryAddItemManager : MonoBehaviour
 
     private void OnAddItem() 
     {
+        // 비어있는 셀을 검색
         var searchResult = Inventory.instance.GetEmptyInventoryCellPos();
 
         if (!searchResult.success)
@@ -26,6 +30,7 @@ public class InventoryAddItemManager : MonoBehaviour
             Debug.Log("Item 이름이 비어있습니다.");
         }
 
+        // 새로운 아이템의 데이터를 생성
         ItemData newItemData = new ItemData()
         {
             itemName = itemNameInputField.text,
@@ -33,6 +38,9 @@ public class InventoryAddItemManager : MonoBehaviour
             targetCellPos = Vector2.zero
         };
 
-        Inventory.instance.AddNewItem(newItemData);
+        // 생성된 정보를 JSON에 저장
+        ItemDataManager.AddItem(newItemData);
+        // 생성된 아이템을 인벤토리에 실체화
+        Inventory.instance.InstantiateItem(newItemData);
     }
 }

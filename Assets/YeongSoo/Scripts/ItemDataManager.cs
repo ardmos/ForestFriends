@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 
 public static class ItemDataManager 
@@ -48,6 +49,14 @@ public static class ItemDataManager
     public static void AddItem(ItemData newItem)
     {
         itemDataList.Add(newItem);
+        Debug.Log($"아이템을 추가했습니다 : {newItem}");
+        SaveItemsToJson();
+    }
+
+    public static void RemoveItem(ItemData item)
+    {
+        itemDataList.Remove(item);
+        Debug.Log($"아이템을 제거했습니다 : {item}");
         SaveItemsToJson();
     }
 

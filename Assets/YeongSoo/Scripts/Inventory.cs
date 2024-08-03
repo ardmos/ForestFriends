@@ -1,13 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 인벤토리의 전반적 기능을 담당하는 스크립트
+/// </summary>
 public class Inventory : MonoBehaviour
 {
     public static Inventory instance;
     private const float CELL_SIZE = 100f;
 
-    public int width = 10; // 인벤토리의 너비
-    public int height = 10; // 인벤토리의 높이
+    public int width; // 인벤토리의 너비
+    public int height; // 인벤토리의 높이
     public GameObject cellPrefab; // 셀 프리팹을 할당하는 변수
     public GameObject itemPrefab; // 아이템 프리팹을 할당하는 변수
     public Canvas mainCanvas;
@@ -24,19 +27,9 @@ public class Inventory : MonoBehaviour
     {
         // 인벤토리 그리드와 셀 배열을 초기화
         cells = new InventoryCell[width, height];
-        CalculateGridOffset();
-        CreateGrid(); // 그리드 생성
-
-        // 아이템 로드
-        List<ItemData> itemDataList = ItemLoader.LoadItemsFromJson();
-
-        Debug.Log($"itemDataList.Count {itemDataList.Count}");
-
-        foreach (ItemData itemData in itemDataList)
-        {
-            InstantiateItem(itemData);
-        }
-
+        CalculateGridOffset(); // 그리드 오프셋 계산
+        CreateGrid(); // 그리드 생성       
+        LoadItems(); // 아이템 로드
     }
 
     private void OnDestroy()
@@ -46,15 +39,29 @@ public class Inventory : MonoBehaviour
 
         foreach(InventoryCell inventoryCell in cells)
         {
-            if(inventoryCell.occupyingItem)
-                itemDataList.Add(inventoryCell.occupyingItem.GetItemData());
+            if(inventoryCell.GetOccupyingItem())
+                itemDataList.Add(inventoryCell.GetOccupyingItem().GetItemData());
         }
 
         Debug.Log($"인벤토리 OnDestroy! 자동 저장 시작!");
-        ItemLoader.SaveCurrentInventoryData(itemDataList);
+        ItemDataManager.SaveCurrentInventoryData(itemDataList);
         Debug.Log($"인벤토리 OnDestroy! 자동 저장 끝?");
     }
 
+    // 저장된 아이템 리스트를 로드해서 인벤토리상에 배치하는 메서드
+    private void LoadItems()
+    {
+        List<ItemData> itemDataList = ItemDataManager.LoadItemsFromJson();
+
+        Debug.Log($"itemDataList.Count {itemDataList.Count}");
+
+        foreach (ItemData itemData in itemDataList)
+        {
+            InstantiateItem(itemData);
+        }
+    }
+
+    // 그리드의 위치 오프셋을 계산하는 메서드
     private void CalculateGridOffset()
     {
         float gridWidth = width * CELL_SIZE;
@@ -63,7 +70,7 @@ public class Inventory : MonoBehaviour
     }
 
     // 인벤토리 그리드를 생성하는 메서드
-    void CreateGrid()
+    private void CreateGrid()
     {
         // 그리드의 전체 크기 계산
         float gridWidth = width * CELL_SIZE; // 50은 그리드 셀의 크기
@@ -102,7 +109,7 @@ public class Inventory : MonoBehaviour
                 // 아이템 정보 설정
                 inventoryItem.SetItemData(newItemData, mainCanvas);
                 // 해당 셀에 아이템 오브젝트 배치 & 아이템 정보 저장
-                cells[x, y].inventoryCellDragHandler.OnDrop(inventoryItem);     
+                cells[x, y].inventoryCellDragHandler.SetItem(inventoryItem);     
             }
 
             // InventoryItem 컴포넌트가 있다면 추가 설정을 할 수 있습니다.
@@ -119,15 +126,6 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public void AddNewItem(ItemData itemData)
-    {
-        // JSON에 저장
-        ItemLoader.AddItem(itemData);
-
-        // UI에 표현
-        InstantiateItem(itemData);
-    }
-
     /// <summary>
     /// 새로운 아이템 추가시 비어있는 셀을 찾아주는 메서드 입니다. 튜플로 결과를 구분지어서 반환해줍니다. 
     /// </summary>
@@ -138,7 +136,7 @@ public class Inventory : MonoBehaviour
         {
             for (int x = 0; x < width; x++)
             {
-                if (cells[x,y].occupyingItem == null)
+                if (cells[x,y].GetOccupyingItem() == null)
                 {
                     return (true, new Vector2(x,y));
                 }
@@ -148,6 +146,7 @@ public class Inventory : MonoBehaviour
         return (false, Vector2.zero);
     }
 
+    // 파라미터로 전달받은 위치의 셀 정보를 반환하는 메서드
     public InventoryCell GetInventoryCellByPos(Vector2 cellPos)
     {
         return cells[(int)cellPos.x, (int)cellPos.y];
