@@ -2,14 +2,14 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public static class ItemLoader 
+public static class ItemDataManager 
 {
     public static string jsonFilePath = "Assets/Resources/itemData.json";
     public static List<ItemData> itemDataList = new List<ItemData>();
 
     public static List<ItemData> LoadItemsFromJson()
     {
-        Debug.Log($"ItemLoader.LoadItemsFromJson()");
+        Debug.Log($"ItemDataManager.LoadItemsFromJson()");
         if (File.Exists(jsonFilePath))
         {
             string json = File.ReadAllText(jsonFilePath);
