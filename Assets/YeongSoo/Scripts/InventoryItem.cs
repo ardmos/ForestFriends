@@ -53,7 +53,6 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public void SetItemData(ItemData itemData, Canvas canvas)
     {
-        Debug.Log($"");
         this.mainCanvas = canvas;
         this.itemData = itemData;
         UpdateUI();

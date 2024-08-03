@@ -1509,7 +1509,6 @@ GameObject:
   - component: {fileID: 1119499013}
   - component: {fileID: 1119499012}
   - component: {fileID: 1119499011}
-  - component: {fileID: 1119499015}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1546,10 +1545,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1440, y: 2560}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -1574,7 +1573,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
+  m_VertexColorAlwaysGammaSpace: 1
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -1603,21 +1602,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &1119499015
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1119499010}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2df09e2280b5d54d9be82e2ea2fc3cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inventory: {fileID: 1584019082}
-  itemNameInput: {fileID: 1899728878}
-  addButton: {fileID: 66377365}
 --- !u!1 &1233677420
 GameObject:
   m_ObjectHideFlags: 0
@@ -1788,6 +1772,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1584019081}
   - component: {fileID: 1584019082}
+  - component: {fileID: 1584019083}
   m_Layer: 5
   m_Name: Inventory
   m_TagString: Untagged
@@ -1833,6 +1818,20 @@ MonoBehaviour:
   cellPrefab: {fileID: 6111489481296380869, guid: 40e04ae576777034d9b0c23a5025fc56, type: 3}
   itemPrefab: {fileID: 3279631742400161182, guid: 96448ddefb11661459f72d425413c59b, type: 3}
   mainCanvas: {fileID: 1119499013}
+--- !u!114 &1584019083
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1584019080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55eaf3d30b649fb4683c238d2d2899e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemNameInputField: {fileID: 1899728878}
+  addItemButton: {fileID: 66377365}
 --- !u!1 &1662147984
 GameObject:
   m_ObjectHideFlags: 0

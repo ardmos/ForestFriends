@@ -134,9 +134,9 @@ public class Inventory : MonoBehaviour
     /// <returns>true 성공, false 실패</returns>
     public (bool success, Vector2 cellPosition) GetEmptyInventoryCellPos()
     {
-        for (int x = 0; x < width; x++)
+        for (int y = 0; y < height; y++)
         {
-            for (int y = 0; y < height; y++)
+            for (int x = 0; x < width; x++)
             {
                 if (cells[x,y].occupyingItem == null)
                 {
