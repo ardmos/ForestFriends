@@ -1,7 +1,6 @@
 {
     "items": [
         {
-            "itemName": "",
             "currentCellPos": {
                 "x": 0.0,
                 "y": 0.0
@@ -9,10 +8,21 @@
             "targetCellPos": {
                 "x": 0.0,
                 "y": 0.0
-            }
+            },
+            "itemID": 0,
+            "itemName": "",
+            "itemPrice": 0,
+            "itemDescription": "",
+            "attack": 0.0,
+            "defence": 0.0,
+            "attackSpeed": 0.0,
+            "healingAmount": 0.0,
+            "itemType": "",
+            "typeMainStat": "",
+            "typeSubStat": "",
+            "itemShape": ""
         },
         {
-            "itemName": "",
             "currentCellPos": {
                 "x": 0.0,
                 "y": 1.0
@@ -20,10 +30,21 @@
             "targetCellPos": {
                 "x": 0.0,
                 "y": 0.0
-            }
+            },
+            "itemID": 0,
+            "itemName": "",
+            "itemPrice": 0,
+            "itemDescription": "",
+            "attack": 0.0,
+            "defence": 0.0,
+            "attackSpeed": 0.0,
+            "healingAmount": 0.0,
+            "itemType": "",
+            "typeMainStat": "",
+            "typeSubStat": "",
+            "itemShape": ""
         },
         {
-            "itemName": "",
             "currentCellPos": {
                 "x": 0.0,
                 "y": 2.0
@@ -31,10 +52,21 @@
             "targetCellPos": {
                 "x": 0.0,
                 "y": 0.0
-            }
+            },
+            "itemID": 0,
+            "itemName": "",
+            "itemPrice": 0,
+            "itemDescription": "",
+            "attack": 0.0,
+            "defence": 0.0,
+            "attackSpeed": 0.0,
+            "healingAmount": 0.0,
+            "itemType": "",
+            "typeMainStat": "",
+            "typeSubStat": "",
+            "itemShape": ""
         },
         {
-            "itemName": "",
             "currentCellPos": {
                 "x": 0.0,
                 "y": 3.0
@@ -42,10 +74,21 @@
             "targetCellPos": {
                 "x": 0.0,
                 "y": 0.0
-            }
+            },
+            "itemID": 0,
+            "itemName": "",
+            "itemPrice": 0,
+            "itemDescription": "",
+            "attack": 0.0,
+            "defence": 0.0,
+            "attackSpeed": 0.0,
+            "healingAmount": 0.0,
+            "itemType": "",
+            "typeMainStat": "",
+            "typeSubStat": "",
+            "itemShape": ""
         },
         {
-            "itemName": "",
             "currentCellPos": {
                 "x": 0.0,
                 "y": 4.0
@@ -53,10 +96,21 @@
             "targetCellPos": {
                 "x": 0.0,
                 "y": 0.0
-            }
+            },
+            "itemID": 0,
+            "itemName": "",
+            "itemPrice": 0,
+            "itemDescription": "",
+            "attack": 0.0,
+            "defence": 0.0,
+            "attackSpeed": 0.0,
+            "healingAmount": 0.0,
+            "itemType": "",
+            "typeMainStat": "",
+            "typeSubStat": "",
+            "itemShape": ""
         },
         {
-            "itemName": "",
             "currentCellPos": {
                 "x": 1.0,
                 "y": 0.0
@@ -64,21 +118,43 @@
             "targetCellPos": {
                 "x": 0.0,
                 "y": 0.0
-            }
+            },
+            "itemID": 0,
+            "itemName": "",
+            "itemPrice": 0,
+            "itemDescription": "",
+            "attack": 0.0,
+            "defence": 0.0,
+            "attackSpeed": 0.0,
+            "healingAmount": 0.0,
+            "itemType": "",
+            "typeMainStat": "",
+            "typeSubStat": "",
+            "itemShape": ""
         },
         {
+            "currentCellPos": {
+                "x": 1.0,
+                "y": 1.0
+            },
+            "targetCellPos": {
+                "x": 0.0,
+                "y": 0.0
+            },
+            "itemID": 0,
             "itemName": "Sword",
-            "currentCellPos": {
-                "x": 1.0,
-                "y": 1.0
-            },
-            "targetCellPos": {
-                "x": 0.0,
-                "y": 0.0
-            }
+            "itemPrice": 0,
+            "itemDescription": "",
+            "attack": 0.0,
+            "defence": 0.0,
+            "attackSpeed": 0.0,
+            "healingAmount": 0.0,
+            "itemType": "",
+            "typeMainStat": "",
+            "typeSubStat": "",
+            "itemShape": ""
         },
         {
-            "itemName": "",
             "currentCellPos": {
                 "x": 1.0,
                 "y": 2.0
@@ -86,10 +162,21 @@
             "targetCellPos": {
                 "x": 0.0,
                 "y": 0.0
-            }
+            },
+            "itemID": 0,
+            "itemName": "",
+            "itemPrice": 0,
+            "itemDescription": "",
+            "attack": 0.0,
+            "defence": 0.0,
+            "attackSpeed": 0.0,
+            "healingAmount": 0.0,
+            "itemType": "",
+            "typeMainStat": "",
+            "typeSubStat": "",
+            "itemShape": ""
         },
         {
-            "itemName": "",
             "currentCellPos": {
                 "x": 1.0,
                 "y": 3.0
@@ -97,10 +184,21 @@
             "targetCellPos": {
                 "x": 0.0,
                 "y": 0.0
-            }
+            },
+            "itemID": 0,
+            "itemName": "",
+            "itemPrice": 0,
+            "itemDescription": "",
+            "attack": 0.0,
+            "defence": 0.0,
+            "attackSpeed": 0.0,
+            "healingAmount": 0.0,
+            "itemType": "",
+            "typeMainStat": "",
+            "typeSubStat": "",
+            "itemShape": ""
         },
         {
-            "itemName": "",
             "currentCellPos": {
                 "x": 1.0,
                 "y": 4.0
@@ -108,32 +206,65 @@
             "targetCellPos": {
                 "x": 0.0,
                 "y": 0.0
-            }
+            },
+            "itemID": 0,
+            "itemName": "",
+            "itemPrice": 0,
+            "itemDescription": "",
+            "attack": 0.0,
+            "defence": 0.0,
+            "attackSpeed": 0.0,
+            "healingAmount": 0.0,
+            "itemType": "",
+            "typeMainStat": "",
+            "typeSubStat": "",
+            "itemShape": ""
         },
         {
+            "currentCellPos": {
+                "x": 2.0,
+                "y": 0.0
+            },
+            "targetCellPos": {
+                "x": 0.0,
+                "y": 0.0
+            },
+            "itemID": 0,
             "itemName": "new",
+            "itemPrice": 0,
+            "itemDescription": "",
+            "attack": 0.0,
+            "defence": 0.0,
+            "attackSpeed": 0.0,
+            "healingAmount": 0.0,
+            "itemType": "",
+            "typeMainStat": "",
+            "typeSubStat": "",
+            "itemShape": ""
+        },
+        {
             "currentCellPos": {
                 "x": 2.0,
-                "y": 0.0
+                "y": 1.0
             },
             "targetCellPos": {
                 "x": 0.0,
                 "y": 0.0
-            }
-        },
-        {
+            },
+            "itemID": 0,
             "itemName": "yo",
-            "currentCellPos": {
-                "x": 2.0,
-                "y": 1.0
-            },
-            "targetCellPos": {
-                "x": 0.0,
-                "y": 0.0
-            }
+            "itemPrice": 0,
+            "itemDescription": "",
+            "attack": 0.0,
+            "defence": 0.0,
+            "attackSpeed": 0.0,
+            "healingAmount": 0.0,
+            "itemType": "",
+            "typeMainStat": "",
+            "typeSubStat": "",
+            "itemShape": ""
         },
         {
-            "itemName": "",
             "currentCellPos": {
                 "x": 2.0,
                 "y": 2.0
@@ -141,10 +272,21 @@
             "targetCellPos": {
                 "x": 0.0,
                 "y": 0.0
-            }
+            },
+            "itemID": 0,
+            "itemName": "",
+            "itemPrice": 0,
+            "itemDescription": "",
+            "attack": 0.0,
+            "defence": 0.0,
+            "attackSpeed": 0.0,
+            "healingAmount": 0.0,
+            "itemType": "",
+            "typeMainStat": "",
+            "typeSubStat": "",
+            "itemShape": ""
         },
         {
-            "itemName": "",
             "currentCellPos": {
                 "x": 2.0,
                 "y": 3.0
@@ -152,10 +294,21 @@
             "targetCellPos": {
                 "x": 0.0,
                 "y": 0.0
-            }
+            },
+            "itemID": 0,
+            "itemName": "",
+            "itemPrice": 0,
+            "itemDescription": "",
+            "attack": 0.0,
+            "defence": 0.0,
+            "attackSpeed": 0.0,
+            "healingAmount": 0.0,
+            "itemType": "",
+            "typeMainStat": "",
+            "typeSubStat": "",
+            "itemShape": ""
         },
         {
-            "itemName": "",
             "currentCellPos": {
                 "x": 2.0,
                 "y": 4.0
@@ -163,43 +316,87 @@
             "targetCellPos": {
                 "x": 0.0,
                 "y": 0.0
-            }
+            },
+            "itemID": 0,
+            "itemName": "",
+            "itemPrice": 0,
+            "itemDescription": "",
+            "attack": 0.0,
+            "defence": 0.0,
+            "attackSpeed": 0.0,
+            "healingAmount": 0.0,
+            "itemType": "",
+            "typeMainStat": "",
+            "typeSubStat": "",
+            "itemShape": ""
         },
         {
+            "currentCellPos": {
+                "x": 3.0,
+                "y": 0.0
+            },
+            "targetCellPos": {
+                "x": 0.0,
+                "y": 0.0
+            },
+            "itemID": 0,
             "itemName": "new4",
+            "itemPrice": 0,
+            "itemDescription": "",
+            "attack": 0.0,
+            "defence": 0.0,
+            "attackSpeed": 0.0,
+            "healingAmount": 0.0,
+            "itemType": "",
+            "typeMainStat": "",
+            "typeSubStat": "",
+            "itemShape": ""
+        },
+        {
             "currentCellPos": {
                 "x": 3.0,
-                "y": 0.0
+                "y": 1.0
             },
             "targetCellPos": {
                 "x": 0.0,
                 "y": 0.0
-            }
-        },
-        {
+            },
+            "itemID": 0,
             "itemName": "newnew",
+            "itemPrice": 0,
+            "itemDescription": "",
+            "attack": 0.0,
+            "defence": 0.0,
+            "attackSpeed": 0.0,
+            "healingAmount": 0.0,
+            "itemType": "",
+            "typeMainStat": "",
+            "typeSubStat": "",
+            "itemShape": ""
+        },
+        {
             "currentCellPos": {
                 "x": 3.0,
-                "y": 1.0
+                "y": 2.0
             },
             "targetCellPos": {
                 "x": 0.0,
                 "y": 0.0
-            }
-        },
-        {
+            },
+            "itemID": 0,
             "itemName": "new3",
-            "currentCellPos": {
-                "x": 3.0,
-                "y": 2.0
-            },
-            "targetCellPos": {
-                "x": 0.0,
-                "y": 0.0
-            }
+            "itemPrice": 0,
+            "itemDescription": "",
+            "attack": 0.0,
+            "defence": 0.0,
+            "attackSpeed": 0.0,
+            "healingAmount": 0.0,
+            "itemType": "",
+            "typeMainStat": "",
+            "typeSubStat": "",
+            "itemShape": ""
         },
         {
-            "itemName": "",
             "currentCellPos": {
                 "x": 3.0,
                 "y": 3.0
@@ -207,10 +404,21 @@
             "targetCellPos": {
                 "x": 0.0,
                 "y": 0.0
-            }
+            },
+            "itemID": 0,
+            "itemName": "",
+            "itemPrice": 0,
+            "itemDescription": "",
+            "attack": 0.0,
+            "defence": 0.0,
+            "attackSpeed": 0.0,
+            "healingAmount": 0.0,
+            "itemType": "",
+            "typeMainStat": "",
+            "typeSubStat": "",
+            "itemShape": ""
         },
         {
-            "itemName": "new2",
             "currentCellPos": {
                 "x": 3.0,
                 "y": 4.0
@@ -218,10 +426,21 @@
             "targetCellPos": {
                 "x": 0.0,
                 "y": 0.0
-            }
+            },
+            "itemID": 0,
+            "itemName": "new2",
+            "itemPrice": 0,
+            "itemDescription": "",
+            "attack": 0.0,
+            "defence": 0.0,
+            "attackSpeed": 0.0,
+            "healingAmount": 0.0,
+            "itemType": "",
+            "typeMainStat": "",
+            "typeSubStat": "",
+            "itemShape": ""
         },
         {
-            "itemName": "Shield",
             "currentCellPos": {
                 "x": 4.0,
                 "y": 0.0
@@ -229,10 +448,21 @@
             "targetCellPos": {
                 "x": 0.0,
                 "y": 0.0
-            }
+            },
+            "itemID": 0,
+            "itemName": "Shield",
+            "itemPrice": 0,
+            "itemDescription": "",
+            "attack": 0.0,
+            "defence": 0.0,
+            "attackSpeed": 0.0,
+            "healingAmount": 0.0,
+            "itemType": "",
+            "typeMainStat": "",
+            "typeSubStat": "",
+            "itemShape": ""
         },
         {
-            "itemName": "",
             "currentCellPos": {
                 "x": 4.0,
                 "y": 1.0
@@ -240,10 +470,21 @@
             "targetCellPos": {
                 "x": 0.0,
                 "y": 0.0
-            }
+            },
+            "itemID": 0,
+            "itemName": "",
+            "itemPrice": 0,
+            "itemDescription": "",
+            "attack": 0.0,
+            "defence": 0.0,
+            "attackSpeed": 0.0,
+            "healingAmount": 0.0,
+            "itemType": "",
+            "typeMainStat": "",
+            "typeSubStat": "",
+            "itemShape": ""
         },
         {
-            "itemName": "",
             "currentCellPos": {
                 "x": 4.0,
                 "y": 2.0
@@ -251,10 +492,21 @@
             "targetCellPos": {
                 "x": 0.0,
                 "y": 0.0
-            }
+            },
+            "itemID": 0,
+            "itemName": "",
+            "itemPrice": 0,
+            "itemDescription": "",
+            "attack": 0.0,
+            "defence": 0.0,
+            "attackSpeed": 0.0,
+            "healingAmount": 0.0,
+            "itemType": "",
+            "typeMainStat": "",
+            "typeSubStat": "",
+            "itemShape": ""
         },
         {
-            "itemName": "",
             "currentCellPos": {
                 "x": 4.0,
                 "y": 3.0
@@ -262,10 +514,21 @@
             "targetCellPos": {
                 "x": 0.0,
                 "y": 0.0
-            }
+            },
+            "itemID": 0,
+            "itemName": "",
+            "itemPrice": 0,
+            "itemDescription": "",
+            "attack": 0.0,
+            "defence": 0.0,
+            "attackSpeed": 0.0,
+            "healingAmount": 0.0,
+            "itemType": "",
+            "typeMainStat": "",
+            "typeSubStat": "",
+            "itemShape": ""
         },
         {
-            "itemName": "",
             "currentCellPos": {
                 "x": 4.0,
                 "y": 4.0
@@ -273,7 +536,19 @@
             "targetCellPos": {
                 "x": 0.0,
                 "y": 0.0
-            }
+            },
+            "itemID": 0,
+            "itemName": "",
+            "itemPrice": 0,
+            "itemDescription": "",
+            "attack": 0.0,
+            "defence": 0.0,
+            "attackSpeed": 0.0,
+            "healingAmount": 0.0,
+            "itemType": "",
+            "typeMainStat": "",
+            "typeSubStat": "",
+            "itemShape": ""
         }
     ]
 }
