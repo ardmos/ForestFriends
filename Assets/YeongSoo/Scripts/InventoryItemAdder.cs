@@ -33,7 +33,7 @@ public class InventoryItemAdder : MonoBehaviour
         // 새로운 아이템의 데이터를 생성
         ItemData newItemData = new ItemData()
         {
-            itemName = itemNameInputField.text,
+            name = itemNameInputField.text,
             currentCellPos = searchResult.cellPosition,
             targetCellPos = Vector2.zero
         };

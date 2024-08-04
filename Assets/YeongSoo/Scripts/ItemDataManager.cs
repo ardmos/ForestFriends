@@ -1,12 +1,14 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 
 public static class ItemDataManager 
 {
-    public static string jsonFilePath = "Assets/Resources/itemData.json";
-    public static List<ItemData> itemDataList = new List<ItemData>();
+    public static readonly string jsonFilePath = "Assets/Resources/itemData.json";
+
+    private static List<ItemData> itemDataList = new List<ItemData>();
 
     public static List<ItemData> LoadItemsFromJson()
     {
@@ -60,19 +62,19 @@ public static class ItemDataManager
         SaveItemsToJson();
     }
 
-    public static void SaveCurrentInventoryData(List<ItemData> newItemDataList)
+    public static void UpdateItemDataList(List<ItemData> newItemDataList)
     {
         Debug.Log($"1.인벤토리 정보 저장중. itemDataList : (");
         foreach (ItemData item in itemDataList)
         {
-            Debug.Log($"{item.itemName} : {item.currentCellPos}");
+            Debug.Log($"{item.name} : {item.currentCellPos}");
         }
         Debug.Log($")");
         itemDataList = new List<ItemData>(newItemDataList);
         Debug.Log($"2.인벤토리 정보 저장중. new itemDataList : ");
         foreach (ItemData item in itemDataList)
         {
-            Debug.Log($"{item.itemName} : {item.currentCellPos}");
+            Debug.Log($"{item.name} : {item.currentCellPos}");
         }
         Debug.Log($")");
         SaveItemsToJson();
@@ -80,6 +82,6 @@ public static class ItemDataManager
 
     public static List<ItemData> GetAllItems()
     {
-        return new List<ItemData>(itemDataList);
+        return itemDataList;
     }
 }

@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 /// <summary>
@@ -17,10 +19,12 @@ public class Inventory : MonoBehaviour
     
     private InventoryCell[,] cells; // 인벤토리 셀을 저장하는 2차원 배열
     private Vector2 gridOffset; // 그리드가 오브젝트를 중앙에 두고 형성되도록 위치를 보정해주는 변수
+    private List<ItemData> itemDataList;
 
     private void Awake()
     {
         instance = this;
+        itemDataList = new List<ItemData>();
     }
 
     private void Start()
@@ -28,7 +32,7 @@ public class Inventory : MonoBehaviour
         // 인벤토리 그리드와 셀 배열을 초기화
         cells = new InventoryCell[width, height];
         CalculateGridOffset(); // 그리드 오프셋 계산
-        CreateGrid(); // 그리드 생성       
+        CreateGrid(); // 그리드 생성                             
         LoadItems(); // 아이템 로드
     }
 
@@ -44,20 +48,27 @@ public class Inventory : MonoBehaviour
         }
 
         Debug.Log($"인벤토리 OnDestroy! 자동 저장 시작!");
-        ItemDataManager.SaveCurrentInventoryData(itemDataList);
+        ItemDataManager.UpdateItemDataList(itemDataList);
         Debug.Log($"인벤토리 OnDestroy! 자동 저장 끝?");
     }
 
     // 저장된 아이템 리스트를 로드해서 인벤토리상에 배치하는 메서드
     private void LoadItems()
     {
-        List<ItemData> itemDataList = ItemDataManager.LoadItemsFromJson();
-
-        Debug.Log($"itemDataList.Count {itemDataList.Count}");
-
-        foreach (ItemData itemData in itemDataList)
+        try
         {
-            InstantiateItem(itemData);
+            itemDataList = ItemDataManager.LoadItemsFromJson();
+
+            Debug.Log($"itemDataList.Count {itemDataList.Count}");
+
+            foreach (ItemData itemData in itemDataList)
+            {
+                InstantiateItem(itemData);
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Exception occurred while loading items: {e.Message}");
         }
     }
 
@@ -96,7 +107,7 @@ public class Inventory : MonoBehaviour
 
     public void InstantiateItem(ItemData newItemData)
     {
-        Debug.Log($"InstantiateItem. itemName:{newItemData.itemName}, cellPos:{newItemData.currentCellPos}");
+        Debug.Log($"InstantiateItem. itemName:{newItemData.name}, cellPos:{newItemData.currentCellPos}");
         int x = (int)newItemData.currentCellPos.x;
         int y = (int)newItemData.currentCellPos.y;
 
