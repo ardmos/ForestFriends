@@ -48,7 +48,7 @@ public class Inventory : MonoBehaviour
         }
 
         Debug.Log($"인벤토리 OnDestroy! 자동 저장 시작!");
-        ItemDataManager.UpdateItemDataList(itemDataList);
+        ItemDataManager.UpdateItemDataListToJson(itemDataList);
         Debug.Log($"인벤토리 OnDestroy! 자동 저장 끝?");
     }
 

@@ -7,9 +7,8 @@ using UnityEngine.UI;
 /// </summary>
 public class InventoryItemAdder : MonoBehaviour
 {
-    public TMP_InputField itemNameInputField;
+    public TMP_InputField itemSpecIDInputField;
     public Button addItemButton;
-
 
     private void Start()
     {
@@ -25,15 +24,15 @@ public class InventoryItemAdder : MonoBehaviour
         {
             Debug.Log("비어있는 인벤토리 셀이 없습니다.");
         }
-        if (string.IsNullOrEmpty(itemNameInputField.text))
+        if (string.IsNullOrEmpty(itemSpecIDInputField.text))
         {
-            Debug.Log("Item 이름이 비어있습니다.");
+            Debug.Log("itemSpecIDInputField가 비어있습니다.");
         }
 
         // 새로운 아이템의 데이터를 생성
         ItemData newItemData = new ItemData()
         {
-            name = itemNameInputField.text,
+            name = itemSpecIDInputField.text,
             currentCellPos = searchResult.cellPosition,
             targetCellPos = Vector2.zero
         };
