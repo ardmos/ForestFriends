@@ -1,10 +1,12 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     public TextMeshProUGUI itemNameText;
+    public Image itemImage;
     public RectTransform rectTransform;
     public CanvasGroup canvasGroup;
 
@@ -38,7 +40,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         // 아이템이 존재하는 셀이었을 경우
         else if (eventData.pointerEnter.TryGetComponent<InventoryItem>(out InventoryItem occupyingItem)) 
         {
-            InventoryCellDragHandler occupiedCell =  Inventory.instance.GetInventoryCellByPos(occupyingItem.itemData.currentCellPos).inventoryCellDragHandler;
+            InventoryCellDragHandler occupiedCell =  Inventory.Instance.GetInventoryCellByPos(occupyingItem.itemData.currentCellPos).inventoryCellDragHandler;
             occupiedCell.OnSwapItems(this);
         }
         // 인벤토리 셀이 아니었을 경우
@@ -46,7 +48,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         {
             Debug.Log($"드롭한 위치가 유효하지 않습니다!. 감지된 오브젝트 : {eventData.pointerEnter.gameObject.name}");
             // 드롭한 위치가 유효하지 않으면 원래 위치(currentCellPos)로 돌아감
-            transform.SetParent(Inventory.instance.GetInventoryCellByPos(itemData.currentCellPos).transform);
+            transform.SetParent(Inventory.Instance.GetInventoryCellByPos(itemData.currentCellPos).transform);
             rectTransform.anchoredPosition = Vector2.zero;
         }
     }
@@ -65,6 +67,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public void UpdateUI()
     {
-        itemNameText.text = itemData.currentCellPos.ToString(); // itemData.itemName;
+        itemNameText.text = itemData.itemSpec.itemName;
+        itemImage.sprite = GameAssetManager.Instance.weaponAssets.GetWeaponImageBySpecID(itemData.itemSpec.itemSpecID);
     }
 }

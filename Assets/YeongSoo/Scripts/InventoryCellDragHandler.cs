@@ -14,7 +14,7 @@ public class InventoryCellDragHandler : MonoBehaviour
     public void OnDrop(InventoryItem draggedItem)
     {
         // 기존 셀에 있는 occupied아이템 정보 제거
-        Inventory.instance.GetInventoryCellByPos(draggedItem.GetItemData().currentCellPos).SetOccupyingItem(null);
+        Inventory.Instance.GetInventoryCellByPos(draggedItem.GetItemData().currentCellPos).SetOccupyingItem(null);
 
         // 드래그된 아이템을 현재 셀에 배치
         SetItem(draggedItem);
@@ -24,7 +24,7 @@ public class InventoryCellDragHandler : MonoBehaviour
     public void OnSwapItems(InventoryItem draggedItem)
     {
         // draggedItem의 기존 위치에 현 아이템을 배치시킨다
-        InventoryCellDragHandler draggedItemDragHandler = Inventory.instance.GetInventoryCellByPos(draggedItem.GetItemData().currentCellPos).inventoryCellDragHandler;
+        InventoryCellDragHandler draggedItemDragHandler = Inventory.Instance.GetInventoryCellByPos(draggedItem.GetItemData().currentCellPos).inventoryCellDragHandler;
         draggedItemDragHandler.SetItem(inventoryCell.GetOccupyingItem());
 
         // 현 셀에 draggedItem을 배치시킨다

@@ -8,7 +8,7 @@ using UnityEngine;
 /// </summary>
 public class Inventory : MonoBehaviour
 {
-    public static Inventory instance;
+    public static Inventory Instance;
     private const float CELL_SIZE = 100f;
 
     public int width; // 인벤토리의 너비
@@ -19,12 +19,12 @@ public class Inventory : MonoBehaviour
     
     private InventoryCell[,] cells; // 인벤토리 셀을 저장하는 2차원 배열
     private Vector2 gridOffset; // 그리드가 오브젝트를 중앙에 두고 형성되도록 위치를 보정해주는 변수
-    private List<ItemData> itemDataList;
+    private List<ItemData> playerItems;
 
     private void Awake()
     {
-        instance = this;
-        itemDataList = new List<ItemData>();
+        Instance = this;
+        playerItems = new List<ItemData>();
     }
 
     private void Start()
@@ -47,9 +47,9 @@ public class Inventory : MonoBehaviour
                 itemDataList.Add(inventoryCell.GetOccupyingItem().GetItemData());
         }
 
-        Debug.Log($"인벤토리 OnDestroy! 자동 저장 시작!");
+        //Debug.Log($"인벤토리 OnDestroy! 자동 저장 시작!");
         ItemDataManager.UpdateItemDataListToJson(itemDataList);
-        Debug.Log($"인벤토리 OnDestroy! 자동 저장 끝?");
+        //Debug.Log($"인벤토리 OnDestroy! 자동 저장 완료");
     }
 
     // 저장된 아이템 리스트를 로드해서 인벤토리상에 배치하는 메서드
@@ -57,12 +57,13 @@ public class Inventory : MonoBehaviour
     {
         try
         {
-            itemDataList = ItemDataManager.LoadItemsFromJson();
+            playerItems = ItemDataManager.LoadItemsFromJson();
 
-            Debug.Log($"itemDataList.Count {itemDataList.Count}");
+            Debug.Log($"playerItems.Count {playerItems.Count}");
 
-            foreach (ItemData itemData in itemDataList)
+            foreach (ItemData itemData in playerItems)
             {
+                Debug.Log(itemData.itemSpec.itemName);
                 InstantiateItem(itemData);
             }
         }
@@ -107,7 +108,7 @@ public class Inventory : MonoBehaviour
 
     public void InstantiateItem(ItemData newItemData)
     {
-        Debug.Log($"InstantiateItem. itemName:{newItemData.name}, cellPos:{newItemData.currentCellPos}");
+        Debug.Log($"InstantiateItem. itemName:{newItemData.itemSpec.itemName}, cellPos:{newItemData.currentCellPos}");
         int x = (int)newItemData.currentCellPos.x;
         int y = (int)newItemData.currentCellPos.y;
 

@@ -6,7 +6,7 @@ using UnityEngine;
 
 public static class ItemSpecManager
 {
-    public static List<ItemSpec> itemSpecList = new List<ItemSpec>();
+    private static Dictionary<int, ItemSpec> itemSpecDictionary = new Dictionary<int, ItemSpec>();
 
     public static async Task LoadItemSpecs()
     {
@@ -15,13 +15,23 @@ public static class ItemSpecManager
             var task = await GoogleSheetLoader.LoadItemSpecsFromGoogleSheet();
 
             if (!task.success) return;
-            
-            itemSpecList = task.itemSpecList;
-            Debug.Log("아이템 스펙 로드를 성공했습니다!");
+
+            itemSpecDictionary = task.itemSpecDictionary;
+            Debug.Log("아이템 스펙 데이터 다운로드를 성공했습니다!");
         }
         catch (Exception e)
         {
             Debug.LogError($"Exception occurred while loading items: {e.Message}");
         }
+    }
+
+    public static ItemSpec GetItemSpecBySpecID(int itemSpecID)
+    {
+        if (itemSpecDictionary.TryGetValue(itemSpecID, out ItemSpec itemSpec))
+        {
+            return itemSpec;
+        }
+        Debug.LogWarning($"ItemSpec with ItemSpecID {itemSpecID} not found.");
+        return null;
     }
 }

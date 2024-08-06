@@ -1,0 +1,29 @@
+{
+    "items": [
+        {
+            "itemID": 0,
+            "itemSpec": {
+                "itemSpecID": -1,
+                "itemName": "",
+                "itemPrice": 0,
+                "itemDescription": "",
+                "attack": 0.0,
+                "defence": 0.0,
+                "attackSpeed": 0.0,
+                "healingAmount": 0.0,
+                "itemType": "",
+                "typeMainStat": "",
+                "typeSubStat": "",
+                "itemShape": ""
+            },
+            "currentCellPos": {
+                "x": 0.0,
+                "y": 0.0
+            },
+            "targetCellPos": {
+                "x": 0.0,
+                "y": 0.0
+            }
+        }
+    ]
+}

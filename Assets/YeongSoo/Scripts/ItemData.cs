@@ -1,22 +1,12 @@
 using UnityEngine;
 
-/*[System.Serializable]
-public class ItemData*/
-[CreateAssetMenu(fileName = "New Item", menuName = "Inventory/Item")]
-public class ItemData : ScriptableObject
+[System.Serializable]
+public class ItemData
 {
-    [SerializeField] private int itemID;
-    public string itemName;
+    public int itemID;
+    public ItemSpec itemSpec;
     public Vector2 currentCellPos = new Vector2();
     public Vector2 targetCellPos = new Vector2();
-
-    // 아이템 ID를 읽기 전용으로 제공
-    public int ID => itemID;
-
-    public void SetID(int newID)
-    {
-        itemID = newID;
-    }
 
     // - 아이템 고유 해시값 확인을 위한 부분 -
     // Equals 메서드 오버라이드

@@ -225,9 +225,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemNameText: {fileID: 8335741642806387017}
+  itemImage: {fileID: 1618230846887925757}
   rectTransform: {fileID: 8610672796326504148}
   canvasGroup: {fileID: 1663766483907242520}
-  currentCellPos: {x: 0, y: 0}
 --- !u!225 &1663766483907242520
 CanvasGroup:
   m_ObjectHideFlags: 0

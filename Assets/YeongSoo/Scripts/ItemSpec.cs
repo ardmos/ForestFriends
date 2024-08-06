@@ -1,3 +1,4 @@
+[System.Serializable]
 public class ItemSpec
 {
     // 아이템 스펙

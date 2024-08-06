@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e440db0612f4aa44acf0ac4eacc258b, type: 3}
   m_Name: WeaponAssets
   m_EditorClassIdentifier: 
-  WeaponImages:
+  weaponImages:
   - {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
   - {fileID: 21300000, guid: 9df716f7e374e1d41bd3ca0106ce7eee, type: 3}

@@ -2011,7 +2011,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55eaf3d30b649fb4683c238d2d2899e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemNameInputField: {fileID: 1899728878}
+  itemSpecIDInputField: {fileID: 1899728878}
   addItemButton: {fileID: 66377365}
 --- !u!114 &1584019084
 MonoBehaviour:
