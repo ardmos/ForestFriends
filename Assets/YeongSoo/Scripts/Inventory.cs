@@ -27,12 +27,17 @@ public class Inventory : MonoBehaviour
         playerItems = new List<ItemData>();
     }
 
-    private void Start()
+    private async void Start()
     {
         // 인벤토리 그리드와 셀 배열을 초기화
         cells = new InventoryCell[width, height];
         CalculateGridOffset(); // 그리드 오프셋 계산
-        CreateGrid(); // 그리드 생성                             
+        CreateGrid(); // 그리드 생성 
+        
+        // 1. 구글시트에서 아이템 스펙 정보를 로드한다.  <실제로는 게임 시작시 로드해야함>
+        await ItemSpecManager.LoadItemSpecs();
+
+        // 2. 로드한 정보를 바탕으로 아이템을 로드한다.
         LoadItems(); // 아이템 로드
     }
 

@@ -1,9 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
-using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
-using static UnityEditor.Progress;
 /// <summary>
 /// ItemSpecID는, 아이템의 이미지나 이름, 스펙 등 정보를 올바르게 초기화해주기 위한 값이고
 /// ItemID는, 이미 생성된 아이템을 특정하기 위한 고유한 값이다. 
@@ -19,27 +16,27 @@ public static class ItemDataManager
     private static bool AddItemToItemDictionary(ItemData item)
     {
         // 아이템 ID가 중복되지 않도록 확인
-        if (!playerItemDictionary.ContainsKey(item.ID))
+        if (!playerItemDictionary.ContainsKey(item.itemID))
         {
-            playerItemDictionary.Add(item.ID, item);
+            playerItemDictionary.Add(item.itemID, item);
             return true;
         }
         else
         {
-            Debug.LogError($"Duplicate item ID found: {item.ID} for item {item.itemSpec.itemName}");
+            Debug.LogError($"Duplicate item ID found: {item.itemID} for item {item.itemSpec.itemName}");
             return false;
         }
     }
     private static bool RemoveItemFromItemDictionary(ItemData item)
     {
-        if (playerItemDictionary.ContainsKey(item.ID))
+        if (playerItemDictionary.ContainsKey(item.itemID))
         {
-            playerItemDictionary.Remove(item.ID);
+            playerItemDictionary.Remove(item.itemID);
             return true;
         }
         else
         {
-            Debug.LogError($"삭제 실패. 해당하는 ID값을 가진 아이템이 리스트에 없습니다: {item.ID}, {item.itemSpec.itemName}");
+            Debug.LogError($"삭제 실패. 해당하는 ID값을 가진 아이템이 리스트에 없습니다: {item.itemID}, {item.itemSpec.itemName}");
             return false;
         }
     }
