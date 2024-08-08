@@ -29,7 +29,7 @@ public class InventoryItemRemover : MonoBehaviour
         }
 
         // JSON 데이터상에서 제거 실패시 나머지 작업은 진행하지 않습니다.
-        if (!ItemDataManager.TryRemoveItem(inventoryCell.GetOccupyingItem().GetItemData())) return;
+        if (!ItemDataManager.TryRemovePlayerItem(inventoryCell.GetOccupyingItem().GetItemData())) return;
 
         // 점유중인 아이템 오브젝트 제거
         Destroy(inventoryCell.GetOccupyingItem().gameObject);

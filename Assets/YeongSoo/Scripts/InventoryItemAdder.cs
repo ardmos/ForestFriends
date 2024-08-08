@@ -43,14 +43,14 @@ public class InventoryItemAdder : MonoBehaviour
         // 고유한 itemID값을 배정해줍니다
         ItemData newItemData = new ItemData()
         {
-            //itemID = 고유한ㄱ밧, /////////////////////////고유 ID 생성부터!
+            itemID = ItemDataManager.GenerateUniqueItemId(),
             itemSpec = itemSpec,
             currentCellPos = searchResult.cellPosition,
             targetCellPos = Vector2.zero
         };
 
         // 생성된 정보를 JSON에 저장 시도. 실패시 나머지 작업은 진행되지 않습니다.
-        if (!ItemDataManager.TryAddItem(newItemData)) return;
+        if (!ItemDataManager.TryAddPlayerItem(newItemData)) return;
 
         // 생성된 아이템을 인벤토리에 실체화
         Inventory.Instance.InstantiateItem(newItemData);
