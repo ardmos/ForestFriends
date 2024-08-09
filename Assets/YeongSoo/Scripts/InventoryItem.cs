@@ -13,6 +13,8 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     private ItemData itemData;
     private Vector2 originalPosition;
     private Canvas mainCanvas;
+    // 5x5 배열 형태로 가공된 아이템 형상 정보를 담을 변수
+    private char[,] itemShapeArray;
 
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -58,6 +60,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         this.mainCanvas = canvas;
         this.itemData = itemData;
         UpdateUI();
+        SetItemShapeArrayData();
     }
 
     public ItemData GetItemData()
@@ -69,5 +72,30 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         itemNameText.text = itemData.itemSpec.itemName;
         itemImage.sprite = GameAssetManager.Instance.weaponAssets.GetWeaponImageBySpecID(itemData.itemSpec.itemSpecID);
+    }
+
+    /// <summary>
+    /// itemSpec에 적힌 아이템 형태 정보에 따라 실제 아이템의 형태를 설정해주는 메서드 입니다 
+    /// 이 정보를 활용해 아이템의 이동과 배치 가능 여부를 결정합니다.
+    /// </summary>
+    private void SetItemShapeArrayData()
+    {
+        // 5x5 형태의 그리드 데이터가 일렬로 담긴 문자열 데이터
+        string shapeData = itemData.itemSpec.itemShape;
+
+        // 5x5 배열 형태로 가공된 아이템 형상 정보를 담을 변수
+        itemShapeArray = new char[5, 5];
+        int chunkSize = 5;
+
+        // 문자열을 5x5 배열로 변환
+        for (int i = 0; i < 5; i++)
+        {
+            for (int j = 0; j < chunkSize; j++)
+            {
+                // 각 행의 시작 인덱스는 i * chunkSize
+                // 열 인덱스는 j
+                itemShapeArray[i, j] = shapeData[i * chunkSize + j];
+            }
+        }
     }
 }
