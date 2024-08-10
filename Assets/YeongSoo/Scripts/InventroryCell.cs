@@ -6,15 +6,19 @@ using UnityEngine.EventSystems;
 /// </summary>
 public class InventoryCell : MonoBehaviour
 {
-    private InventoryItem occupyingItem = null; // 현재 셀에 있는 아이템
+    [SerializeField] private InventoryItem occupyingItem = null; // 현재 셀에 있는 아이템
     public InventoryCellDragHandler inventoryCellDragHandler;
     public Vector2 cellPos = Vector2.zero;
 
     public InventoryItem GetOccupyingItem() { return occupyingItem; }
     public void SetOccupyingItem(InventoryItem occupyingItem) 
     {
-        Debug.Log($"cell:{cellPos}의 occupingItem 데이터가 설정됩니다");
+        //Debug.Log($"cell:{cellPos}의 occupingItem 데이터가 설정됩니다");
         this.occupyingItem = occupyingItem; 
+    }
+    public void RemoveOccupyingItem()
+    {
+        occupyingItem = null;
     }
 
     // 하이라이트 기능

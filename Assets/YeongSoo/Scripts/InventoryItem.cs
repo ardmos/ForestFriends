@@ -91,11 +91,12 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         ReturnToOriginalPosition();
     }
 
-    public void SetItemData(ItemData itemData, Canvas canvas)
+    // 아이템 정보 초기화
+    public void InitInventoryItem(ItemData itemData, Canvas canvas)
     {
         this.mainCanvas = canvas;
         this.itemData = itemData;
-        SetItemShapeArrayData();
+        InitItemShapeArrayData();
         InitItemImage();
     }
 
@@ -104,10 +105,15 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         return this.itemData;
     }
 
+    public void SetNewCurrentCellPos(Vector2 newPos)
+    {
+        itemData.currentCellPos = newPos;
+    }
+
     /// <summary>
-    /// itemSpec에 담긴 itemShape 데이터를 5x5 배열로 변환해 저장하는 메서드입니다.
+    /// itemSpec에 담긴 itemShape 데이터를 5x5 배열로 변환해 초기화하는 메서드입니다.
     /// </summary>
-    private void SetItemShapeArrayData()
+    private void InitItemShapeArrayData()
     {
         // 5x5 형태의 그리드 데이터가 일렬로 담긴 문자열 데이터
         string shapeData = itemData.itemSpec.itemShape;
@@ -123,7 +129,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             {
                 // 각 행의 시작 인덱스는 i * chunkSize
                 // 열 인덱스는 j
-                itemShapeArray[i, j] = shapeData[i * chunkSize + j];
+                itemShapeArray[j, i] = shapeData[i * chunkSize + j];
             }
         }
     }
@@ -134,9 +140,40 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         itemImage.sprite = GameAssetManager.Instance.weaponAssets.GetWeaponImageBySpecID(itemData.itemSpec.itemSpecID);
     }
 
-    // 아이템 터치 가능 영역 초기화
-    private void InitItemTouchArea()
+    // 아이템 점유 영역을 업데이트하는 메서드
+    public void UpdateItemArea()
     {
-        // itemShapeArray[2,2] 가 현 아이템의 중심. 
+        // itemShapeArray 입장에선 [2,2]가 현 아이템의 중심. 
+        // 따라서 드래그 드랍이 된 셀에서 (-2,-2) 이동한 위치가 itemShapeArray의 [0,0]. 오프셋 값이 됩니다.
+        // itemShapeArray의 값이 1인 포지션의 셀들에 아이템 점유 설정을 해줘야 합니다. 0일 경우 점유 해제
+
+        // 우선 현 셀의 pos를 얻어옵니다
+        Vector2 currentCellPos = itemData.currentCellPos;
+        // 현 셀의 포지션과 itemShapeArray 인덱스 사이의 오프셋 값 구하기
+        Vector2 offset = currentCellPos - new Vector2(2, 2);
+
+        // 실제 인벤토리의 셀들에 아이템 점유 설정을 해주기.
+        for(int x = 0; x < 5; x++)
+        {
+            for(int y = 0; y < 5; y++)
+            {
+                // offset이 적용된 최종 포지션을 담을 Vector2 변수
+                Vector2 actualCellPos = offset + new Vector2(x, y); // offest이 적용된 최정 포지션을 담습니다
+
+                //Debug.Log($"itemShapeArray[x,y]:{itemShapeArray[x, y]}");
+                if (itemShapeArray[x,y] == '1')
+                {
+                    //Debug.Log($"셀에 아이템{itemData.itemSpec.itemName} 점유 설정! cellPos:{actualCellPos}");
+                    // 1일 경우 해당 셀에 점유 설정
+                    Inventory.Instance.GetInventoryCellByPos(actualCellPos)?.SetOccupyingItem(this);
+                }
+                else
+                {
+                    //Debug.Log($"셀에 아이템{itemData.itemSpec.itemName} 점유 해제! cellPos:{actualCellPos}");
+                    // 0일 경우 해당 셀에 점유 해제
+                    Inventory.Instance.GetInventoryCellByPos(actualCellPos)?.RemoveOccupyingItem();
+                }
+            }
+        }
     }
 }

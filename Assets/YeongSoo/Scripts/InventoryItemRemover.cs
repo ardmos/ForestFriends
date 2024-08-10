@@ -34,6 +34,6 @@ public class InventoryItemRemover : MonoBehaviour
         // 점유중인 아이템 오브젝트 제거
         Destroy(inventoryCell.GetOccupyingItem().gameObject);
         // 점유중인 아이템 데이터 제거
-        inventoryCell.SetOccupyingItem(null);
+        inventoryCell.RemoveOccupyingItem();
     }
 }

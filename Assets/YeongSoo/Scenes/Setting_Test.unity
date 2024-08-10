@@ -805,7 +805,7 @@ GameObject:
   m_Component:
   - component: {fileID: 509198378}
   m_Layer: 0
-  m_Name: Player Character Pos (1)
+  m_Name: Player Character Pos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
