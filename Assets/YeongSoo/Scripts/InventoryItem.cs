@@ -128,10 +128,9 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         }
     }
 
-    // 아이템의 이미지와 이미지 크기를 설정하는 메서드 입니다
+    // 아이템의 이미지를 초기화하는 메서드 입니다
     private void InitItemImage()
     {
         itemImage.sprite = GameAssetManager.Instance.weaponAssets.GetWeaponImageBySpecID(itemData.itemSpec.itemSpecID);
-
     }
 }
