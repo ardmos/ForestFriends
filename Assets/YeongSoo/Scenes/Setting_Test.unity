@@ -1934,7 +1934,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -50, y: 50}
+  m_AnchoredPosition: {x: -200, y: 200}
   m_SizeDelta: {x: 700, y: 700}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &1584019082
@@ -1949,8 +1949,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ddf63378ebd0b4418166578b908f5ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 5
-  height: 5
+  width: 10
+  height: 10
   cellPrefab: {fileID: 6111489481296380869, guid: 40e04ae576777034d9b0c23a5025fc56, type: 3}
   itemPrefab: {fileID: 3279631742400161182, guid: 96448ddefb11661459f72d425413c59b, type: 3}
   mainCanvas: {fileID: 1119499013}

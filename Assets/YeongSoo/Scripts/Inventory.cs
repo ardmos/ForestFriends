@@ -90,7 +90,7 @@ public class Inventory : MonoBehaviour
     private void CreateGrid()
     {
         // 그리드의 전체 크기 계산
-        float gridWidth = width * CELL_SIZE; // 50은 그리드 셀의 크기
+        float gridWidth = width * CELL_SIZE;
         float gridHeight = height * CELL_SIZE;
 
         // 그리드의 시작 위치 계산 (중앙에서 그리드의 절반 크기만큼 이동)
@@ -126,16 +126,8 @@ public class Inventory : MonoBehaviour
                 // 아이템 정보 설정
                 inventoryItem.SetItemData(newItemData, mainCanvas);
                 // 해당 셀에 아이템 오브젝트 배치 & 아이템 정보 저장
-                cells[x, y].inventoryCellDragHandler.SetItem(inventoryItem);     
+                cells[x, y].inventoryCellDragHandler.SetItemOnCurrentCell(inventoryItem);     
             }
-
-            // InventoryItem 컴포넌트가 있다면 추가 설정을 할 수 있습니다.
-/*            InventoryItem inventoryItem = itemObject.GetComponent<InventoryItem>();
-            if (inventoryItem != null)
-            {
-                // 필요한 경우 InventoryItem에 추가 설정
-                // 예: inventoryItem.Initialize(newItem);
-            }*/
         }
         else
         {

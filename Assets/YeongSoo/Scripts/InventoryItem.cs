@@ -32,35 +32,71 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        canvasGroup.blocksRaycasts = true; // 드래그가 끝나면 다시 감지 가능하도록 설정
+        // 드래그가 끝나면 다시 레이캐스트를 감지할 수 있도록 설정
+        canvasGroup.blocksRaycasts = true;
 
-        // 빈 셀이었을 경우
+        // 드롭한 위치가 빈 공간인 경우
+        if (eventData.pointerEnter == null)
+        {
+            HandleInvalidDropLocation();
+            return;
+        }
+
+        // 드롭한 위치가 빈 인벤토리 셀인지 확인
         if (eventData.pointerEnter.TryGetComponent<InventoryCellDragHandler>(out InventoryCellDragHandler inventoryCellDragHandler))
         {
-            inventoryCellDragHandler.OnDrop(this);         
+            HandleEmptyCellDrop(inventoryCellDragHandler);
         }
-        // 아이템이 존재하는 셀이었을 경우
-        else if (eventData.pointerEnter.TryGetComponent<InventoryItem>(out InventoryItem occupyingItem)) 
+        // 드롭한 위치에 아이템이 존재하는지 확인
+        else if (eventData.pointerEnter.TryGetComponent<InventoryItem>(out InventoryItem occupyingItem))
         {
-            InventoryCellDragHandler occupiedCell =  Inventory.Instance.GetInventoryCellByPos(occupyingItem.itemData.currentCellPos).inventoryCellDragHandler;
-            occupiedCell.OnSwapItems(this);
+            HandleOccupiedCellDrop(occupyingItem);
         }
-        // 인벤토리 셀이 아니었을 경우
+        // 드롭한 위치가 인벤토리 셀이 아닌 경우
         else
         {
-            Debug.Log($"드롭한 위치가 유효하지 않습니다!. 감지된 오브젝트 : {eventData.pointerEnter.gameObject.name}");
-            // 드롭한 위치가 유효하지 않으면 원래 위치(currentCellPos)로 돌아감
-            transform.SetParent(Inventory.Instance.GetInventoryCellByPos(itemData.currentCellPos).transform);
-            rectTransform.anchoredPosition = Vector2.zero;
+            HandleInvalidDropLocation();
         }
+    }
+
+    // 아이템을 원래 위치로 되돌리는 메서드
+    private void ReturnToOriginalPosition()
+    {
+        // 현재 아이템의 원래 부모(셀)를 찾고, 위치를 초기화
+        Transform originalParent = Inventory.Instance.GetInventoryCellByPos(itemData.currentCellPos).transform;
+        transform.SetParent(originalParent);
+        rectTransform.anchoredPosition = Vector2.zero;
+    }
+
+    // 빈 셀에 드롭했을 때 처리하는 메서드
+    private void HandleEmptyCellDrop(InventoryCellDragHandler inventoryCellDragHandler)
+    {
+        inventoryCellDragHandler.OnDrop(this);
+    }
+
+    // 이미 아이템이 있는 셀에 드롭했을 때 처리하는 메서드
+    private void HandleOccupiedCellDrop(InventoryItem occupyingItem)
+    {
+        // 현재 아이템과 교환할 셀을 찾아서 아이템 교환 처리
+        InventoryCellDragHandler occupiedCell = Inventory.Instance.GetInventoryCellByPos(occupyingItem.itemData.currentCellPos).inventoryCellDragHandler;
+        occupiedCell.OnSwapItems(this);
+    }
+
+    // 드롭한 위치가 유효하지 않은 경우 처리하는 메서드
+    private void HandleInvalidDropLocation()
+    {
+        // 유효하지 않은 드롭 위치에 대한 로그 출력
+        Debug.Log($"Invalid drop location detected!");
+        // 원래 위치로 돌아감
+        ReturnToOriginalPosition();
     }
 
     public void SetItemData(ItemData itemData, Canvas canvas)
     {
         this.mainCanvas = canvas;
         this.itemData = itemData;
-        UpdateUI();
         SetItemShapeArrayData();
+        InitItemImage();
     }
 
     public ItemData GetItemData()
@@ -68,15 +104,8 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         return this.itemData;
     }
 
-    public void UpdateUI()
-    {
-        itemNameText.text = itemData.itemSpec.itemName;
-        itemImage.sprite = GameAssetManager.Instance.weaponAssets.GetWeaponImageBySpecID(itemData.itemSpec.itemSpecID);
-    }
-
     /// <summary>
-    /// itemSpec에 적힌 아이템 형태 정보에 따라 실제 아이템의 형태를 설정해주는 메서드 입니다 
-    /// 이 정보를 활용해 아이템의 이동과 배치 가능 여부를 결정합니다.
+    /// itemSpec에 담긴 itemShape 데이터를 5x5 배열로 변환해 저장하는 메서드입니다.
     /// </summary>
     private void SetItemShapeArrayData()
     {
@@ -97,5 +126,12 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
                 itemShapeArray[i, j] = shapeData[i * chunkSize + j];
             }
         }
+    }
+
+    // 아이템의 이미지와 이미지 크기를 설정하는 메서드 입니다
+    private void InitItemImage()
+    {
+        itemImage.sprite = GameAssetManager.Instance.weaponAssets.GetWeaponImageBySpecID(itemData.itemSpec.itemSpecID);
+
     }
 }

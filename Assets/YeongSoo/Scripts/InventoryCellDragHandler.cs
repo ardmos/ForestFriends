@@ -17,7 +17,7 @@ public class InventoryCellDragHandler : MonoBehaviour
         Inventory.Instance.GetInventoryCellByPos(draggedItem.GetItemData().currentCellPos).SetOccupyingItem(null);
 
         // 드래그된 아이템을 현재 셀에 배치
-        SetItem(draggedItem);
+        SetItemOnCurrentCell(draggedItem);
     }
 
     // 드래그된 셀에 기존에 아이템이 존재할 때. 현 아이템과 draggedItem의 위치를 교환합니다
@@ -25,19 +25,18 @@ public class InventoryCellDragHandler : MonoBehaviour
     {
         // draggedItem의 기존 위치에 현 아이템을 배치시킨다
         InventoryCellDragHandler draggedItemDragHandler = Inventory.Instance.GetInventoryCellByPos(draggedItem.GetItemData().currentCellPos).inventoryCellDragHandler;
-        draggedItemDragHandler.SetItem(inventoryCell.GetOccupyingItem());
+        draggedItemDragHandler.SetItemOnCurrentCell(inventoryCell.GetOccupyingItem());
 
         // 현 셀에 draggedItem을 배치시킨다
-        SetItem(draggedItem);
+        SetItemOnCurrentCell(draggedItem);
     }
 
     // 현재 셀에 아이템 데이터를 배치하는 메서드. (아이템 오브젝트의 인스턴스화는 Inventory 클래스에서 담당합니다. 여기서는 데이터의 수정만 처리.)
-    public void SetItem(InventoryItem inventoryItem)
+    public void SetItemOnCurrentCell(InventoryItem inventoryItem)
     {
         inventoryItem.transform.SetParent(inventoryCell.transform);
         inventoryItem.transform.localPosition = Vector3.zero;
         inventoryCell.SetOccupyingItem(inventoryItem); // 현재 셀에 아이템 정보 저장
         inventoryItem.GetItemData().currentCellPos = inventoryCell.cellPos; // 아이템에 저장되는 셀 위치 정보를 업데이트
-        inventoryItem.UpdateUI();
     }
 }
