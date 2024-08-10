@@ -133,4 +133,10 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         itemImage.sprite = GameAssetManager.Instance.weaponAssets.GetWeaponImageBySpecID(itemData.itemSpec.itemSpecID);
     }
+
+    // 아이템 터치 가능 영역 초기화
+    private void InitItemTouchArea()
+    {
+        // itemShapeArray[2,2] 가 현 아이템의 중심. 
+    }
 }
