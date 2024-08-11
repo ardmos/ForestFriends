@@ -29,7 +29,21 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public void OnDrag(PointerEventData eventData)
     {
-        rectTransform.anchoredPosition += eventData.delta; // 마우스 이동에 따라 아이템 이동
+        if (mainCanvas == null)
+            return;
+
+        Vector2 localPoint;
+        // 마우스의 화면 좌표를 캔버스의 로컬 좌표로 변환
+        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            mainCanvas.transform as RectTransform,
+            eventData.position,
+            eventData.pressEventCamera,
+            out localPoint))
+        {
+            // 마우스 이동에 따라 아이템 이동
+            // 로컬 좌표를 UI 요소의 위치로 설정
+            rectTransform.anchoredPosition = localPoint;
+        }
     }
 
     public void OnEndDrag(PointerEventData eventData)
