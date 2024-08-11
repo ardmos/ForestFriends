@@ -34,8 +34,8 @@ public class InventoryCellDragHandler : MonoBehaviour
     // 현재 셀에 아이템 데이터를 배치하는 메서드. (아이템 오브젝트의 인스턴스화는 Inventory 클래스에서 담당합니다. 여기서는 데이터의 수정만 처리.)
     public void SetItemOnCurrentCell(InventoryItem inventoryItem)
     {
-        inventoryItem.transform.SetParent(inventoryCell.transform);
-        inventoryItem.transform.localPosition = Vector3.zero;
+        inventoryItem.transform.SetParent(Inventory.Instance.contents.transform);
+        inventoryItem.transform.localPosition = inventoryCell.transform.localPosition;
         inventoryItem.SetNewCurrentCellPos(inventoryCell.cellPos); // 아이템에 저장되는 셀 위치 정보를 업데이트                                                           
         inventoryItem.UpdateItemArea(); // 아이템 영역 업데이트. 
     }

@@ -16,9 +16,11 @@ public class Inventory : MonoBehaviour
     public GameObject cellPrefab; // 셀 프리팹을 할당하는 변수
     public GameObject itemPrefab; // 아이템 프리팹을 할당하는 변수
     public Canvas mainCanvas;
-    public GameObject contents; // 아이템 컨텐츠들의 부모 모브젝트
+    public GameObject cells; // 셀들의 부모 오브젝트
+    public GameObject contents; // 아이템 컨텐츠들의 부모 오브젝트
+    public GameObject inventorySlots; // 셀에 가방이 배치됐을 시 활성화되는 아이템 배치 가능 슬롯 표시 오브젝트들의 부모 오브젝트
 
-    private InventoryCell[,] cells; // 인벤토리 셀을 저장하는 2차원 배열
+    private InventoryCell[,] cellArray; // 인벤토리 셀을 저장하는 2차원 배열
     private Vector2 gridOffset; // 그리드가 오브젝트를 중앙에 두고 형성되도록 위치를 보정해주는 변수
     private List<ItemData> playerItems;
 
@@ -30,8 +32,8 @@ public class Inventory : MonoBehaviour
 
     private async void Start()
     {
-        // 인벤토리 그리드와 셀 배열을 초기화
-        cells = new InventoryCell[widthCellCount, heightCellCount];
+        // 인벤토리 셀 배열을 초기화
+        cellArray = new InventoryCell[widthCellCount, heightCellCount];
         // 그리드 생성 
         CreateGrid(); 
         // 1. 구글시트에서 아이템 스펙 정보를 로드한다.  <실제로는 게임 시작시 로드해야함>
@@ -45,7 +47,7 @@ public class Inventory : MonoBehaviour
         // 씬이 닫힐 때 현재 인벤토리 내 아이템 정보 자동 저장
         List<ItemData> itemDataList = new List<ItemData>();
 
-        foreach (InventoryCell inventoryCell in cells)
+        foreach (InventoryCell inventoryCell in cellArray)
         {
             // 점유된 cell일 경우, 해당 cell을 점유중인 아이템의 중심 포지션에 있는 cell만 저장합니다
             if (inventoryCell.GetOccupyingItem() && inventoryCell.cellPos == inventoryCell.GetOccupyingItem().GetItemData().currentCellPos)
@@ -98,11 +100,11 @@ public class Inventory : MonoBehaviour
             for (int y = 0; y < heightCellCount; y++)
             {
                 // 셀 프리팹을 인스턴스화하고 위치 설정
-                GameObject cellObject = Instantiate(cellPrefab, contents.transform);
+                GameObject cellObject = Instantiate(cellPrefab, cells.transform);
                 cellObject.GetComponent<RectTransform>().anchoredPosition = gridOffset + new Vector2(x * CELL_SIZE, -y * CELL_SIZE);
                 //Debug.Log($"그리드 셀을 그립니다. cell(x:{x},y{y}), anchoredPos : {cellObject.GetComponent<RectTransform>().anchoredPosition}");
                 InventoryCell cell = cellObject.GetComponent<InventoryCell>();
-                cells[x, y] = cell;
+                cellArray[x, y] = cell;
                 cell.cellPos = new Vector2(x, y);
             }
         }
@@ -116,14 +118,14 @@ public class Inventory : MonoBehaviour
 
         if (x >= 0 && x < widthCellCount && y >= 0 && y < heightCellCount)
         {
-            GameObject itemObject = Instantiate(itemPrefab, cells[x, y].transform);
+            GameObject itemObject = Instantiate(itemPrefab, cellArray[x, y].transform);
 
             if (itemObject.TryGetComponent<InventoryItem>(out InventoryItem inventoryItem))
             {
                 // 아이템 정보 초기화
                 inventoryItem.InitInventoryItem(newItemData, mainCanvas);
                 // 해당 셀에 아이템 오브젝트 배치 & 아이템 정보 저장
-                cells[x, y].inventoryCellDragHandler.SetItemOnCurrentCell(inventoryItem);
+                cellArray[x, y].inventoryCellDragHandler.SetItemOnCurrentCell(inventoryItem);
             }
         }
         else
@@ -142,7 +144,7 @@ public class Inventory : MonoBehaviour
         {
             for (int x = 0; x < widthCellCount; x++)
             {
-                if (cells[x, y].GetOccupyingItem() == null)
+                if (cellArray[x, y].GetOccupyingItem() == null)
                 {
                     return (true, new Vector2(x, y));
                 }
@@ -156,13 +158,13 @@ public class Inventory : MonoBehaviour
     public InventoryCell GetInventoryCellByPos(Vector2 cellPos)
     {
         // 유효한 인덱스인지 확인
-        if (cellPos.x < 0 || cellPos.x >= cells.GetLength(0) || cellPos.y < 0 || cellPos.y >= cells.GetLength(1))
+        if (cellPos.x < 0 || cellPos.x >= cellArray.GetLength(0) || cellPos.y < 0 || cellPos.y >= cellArray.GetLength(1))
         {
             // 유효하지 않은 경우 null 반환
             return null;
         }
 
         // 유효한 경우 셀 반환
-        return cells[(int)cellPos.x, (int)cellPos.y];
+        return cellArray[(int)cellPos.x, (int)cellPos.y];
     }
 }
