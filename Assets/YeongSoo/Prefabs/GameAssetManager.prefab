@@ -45,4 +45,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponAssets: {fileID: 11400000, guid: c2f08e373c184ef4596d288ab1f34370, type: 2}
+  equipmentAssets: {fileID: 11400000, guid: bbfca4fbbc8020140aefa31510364a8f, type: 2}
+  foodAssets: {fileID: 11400000, guid: 95cd9cb43c7d2cf4095e5e5ab2a33337, type: 2}
+  miscAssets: {fileID: 11400000, guid: d8a425103fa6e064fb40af94441c5fcf, type: 2}
   bagAssets: {fileID: 11400000, guid: 8ea67f340145ae241b8ae574052bffec, type: 2}
+  gemAssets: {fileID: 11400000, guid: b84a85c601771d548a56c02ea20ec2c2, type: 2}

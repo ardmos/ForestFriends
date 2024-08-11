@@ -10,7 +10,11 @@ public class GameAssetManager : MonoBehaviour
     public static GameAssetManager Instance { get; private set; }
 
     public WeaponAssets weaponAssets;
+    public EquipmentAssets equipmentAssets;
+    public FoodAssets foodAssets;
+    public MiscAssets miscAssets;
     public BagAssets bagAssets;
+    public GemAssets gemAssets;
 
     private void Awake()
     {
@@ -31,8 +35,16 @@ public class GameAssetManager : MonoBehaviour
         {
             case GoogleSheetLoader.Sheets.WEAPON:
                 return weaponAssets.GetWeaponImageBySpecID(itemSpecID);
+            case GoogleSheetLoader.Sheets.EQUIPMENT:
+                return equipmentAssets.GetEquipmentImageBySpecID(itemSpecID);
+            case GoogleSheetLoader.Sheets.FOOD:
+                return foodAssets.GetFoodImageBySpecID(itemSpecID);
+            case GoogleSheetLoader.Sheets.MISC:
+                return miscAssets.GetGemImageBySpecID(itemSpecID);
             case GoogleSheetLoader.Sheets.BAG:
                 return bagAssets.GetBagImageBySpecID(itemSpecID);
+            case GoogleSheetLoader.Sheets.GEM:
+                return gemAssets.GetGemImageBySpecID(itemSpecID);
             default: return null;
         }
     }
