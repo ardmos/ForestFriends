@@ -9,7 +9,7 @@ using UnityEngine;
 public class Inventory : MonoBehaviour
 {
     public static Inventory Instance;
-    private const float CELL_SIZE = 100f;
+    public const float CELL_SIZE = 100f;
 
     public int widthCellCount; // 인벤토리의 너비
     public int heightCellCount; // 인벤토리의 높이

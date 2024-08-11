@@ -5,10 +5,12 @@ using UnityEngine.UI;
 
 public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    public TextMeshProUGUI itemNameText;
-    public Image itemImage;
     public RectTransform rectTransform;
     public CanvasGroup canvasGroup;
+    public TextMeshProUGUI itemNameText;
+    public Image itemImage;
+    public GameObject touchAreas;
+    public GameObject touchAreaPrefab;
 
     private ItemData itemData;
     private Vector2 originalPosition;
@@ -98,6 +100,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         this.itemData = itemData;
         InitItemShapeArrayData();
         InitItemImage();
+        InitTouchArea();
     }
 
     public ItemData GetItemData()
@@ -140,7 +143,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         itemImage.sprite = GameAssetManager.Instance.weaponAssets.GetWeaponImageBySpecID(itemData.itemSpec.itemSpecID);
     }
 
-    // 아이템 점유 영역을 업데이트하는 메서드
+    // 아이템 점유 영역을 업데이트하는 메서드 입니다
     public void UpdateItemArea()
     {
         // itemShapeArray 입장에선 [2,2]가 현 아이템의 중심. 
@@ -172,6 +175,25 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
                     //Debug.Log($"셀에 아이템{itemData.itemSpec.itemName} 점유 해제! cellPos:{actualCellPos}");
                     // 0일 경우 해당 셀에 점유 해제
                     Inventory.Instance.GetInventoryCellByPos(actualCellPos)?.RemoveOccupyingItem();
+                }
+            }
+        }
+    }
+
+    // 아이템 터치 가능 영역을 초기화하는 메서드 입니다
+    private void InitTouchArea()
+    {
+        int areaCenterOffset = 200;
+        for (int x = 0; x < 5; x++)
+        {
+            for (int y = 0; y < 5; y++)
+            {
+                if (itemShapeArray[x, y] == '1')
+                {
+                    Debug.Log($"x,y : {x},{y}, pos : {new Vector2((x * Inventory.CELL_SIZE - areaCenterOffset), -(y * Inventory.CELL_SIZE - areaCenterOffset))}");
+                    // 1일 경우 해당 포지션에 터치 가능 영역 생성
+                    GameObject touchAreaObject = Instantiate(touchAreaPrefab, touchAreas.transform);
+                    touchAreaObject.transform.localPosition = new Vector2((x * Inventory.CELL_SIZE - areaCenterOffset), -(y * Inventory.CELL_SIZE - areaCenterOffset));
                 }
             }
         }
