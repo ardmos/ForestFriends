@@ -7,6 +7,7 @@ using UnityEngine.UI;
 /// </summary>
 public class InventoryItemAdder : MonoBehaviour
 {
+    public TMP_InputField itemSheetNameInputField;
     public TMP_InputField itemSpecIDInputField;
     public Button addItemButton;
 
@@ -32,7 +33,7 @@ public class InventoryItemAdder : MonoBehaviour
         }
 
         // 1. SpecID값으로 아이템 스펙 데이터를 검색
-        ItemSpec itemSpec = ItemSpecManager.GetItemSpecBySpecID(int.Parse(itemSpecIDInputField.text));
+        ItemSpec itemSpec = ItemSpecManager.GetItemSpecBySpecID((GoogleSheetLoader.Sheets)int.Parse(itemSheetNameInputField.text), int.Parse(itemSpecIDInputField.text));
         if (itemSpec == null)
         {
             Debug.Log("Spec 데이터 검색 실패. 아이템 추가 작업을 중지합니다.");

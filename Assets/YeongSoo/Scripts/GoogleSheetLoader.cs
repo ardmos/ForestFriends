@@ -2,9 +2,20 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
+using static GoogleSheetLoader;
 
 public static class GoogleSheetLoader
 {
+    public enum Sheets
+    {
+        WEAPON,
+        EQUIPMENT,
+        FOOD,
+        MISC,
+        BAG,
+        GEM
+    }
+
     private enum Columns
     {
         ItemSpecID,
@@ -18,25 +29,24 @@ public static class GoogleSheetLoader
         ItemType,
         TypeMainStat,
         TypeSubStat,
-        ItemShape,
-        non2, // 아무것도 아닙니다. 아래 VersionFiled값을 찾기 위한 빈칸들.
-        non3, 
-        non4,
-        non5,
-        non6,
-        VersionFiled
+        ItemShape
     }
 
-    // 아이템 스펙 시트 url
-    private static readonly string itemSpecSheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQLgdf4HJcBCjMIQLWNSTqchySCpzpHIArTWuIwHjYYCV1S4K_j5kDtZ9sp47hDLDPhyHF7D2nXoKdO/pub?output=tsv";
+    // 특정 시트 gid
+    private const string GID_WEAPON = "1208485493";
+    private const string GID_EQUIPMENT = "1279431268";
+    private const string GID_FOOD = "276662484";
+    private const string GID_MISC = "229270413";
+    private const string GID_BAG = "1179647824";
+    private const string GID_GEM = "961347244";
 
     // 구글 시트 데이터를 읽어올 때 쓰이는 변수들
     private static int rowOffset = 5; // 각 아이템들이 5행씩 차지하기 때문에, 다음 아이템을 검색하기 위한 보정값
     private static int itemShapeColumnOffset = 5; // 아이템 형태 칼럼은 다섯 줄이기 때문에, 전부 읽어오기 위한 보정값.
 
-    public static async Task<(bool success, Dictionary<int, ItemSpec> itemSpecDictionary)> LoadItemSpecsFromGoogleSheet()
+    public static async Task<(bool success, Dictionary<int, ItemSpec> itemSpecDictionary)> LoadSpecificSheetData(Sheets sheetName)
     {
-        using (UnityWebRequest www = UnityWebRequest.Get(itemSpecSheetUrl))
+        using (UnityWebRequest www = UnityWebRequest.Get(GetItemSheetURL(sheetName)))
         {
             Debug.Log("아이템 스펙 데이터 다운로드를 시작합니다");
             var webRequestOpration = www.SendWebRequest();
@@ -51,8 +61,8 @@ public static class GoogleSheetLoader
             }
             else
             {
-                //Debug.Log("아이템 스펙 데이터 다운로드를 성공했습니다.");
-                //Debug.Log($"{www.downloadHandler.text}");
+                Debug.Log($"{sheetName}아이템 스펙 데이터 다운로드를 성공했습니다.");
+                Debug.Log($"{www.downloadHandler.text}");
                 return (true, ParshingSheetDataToItemSpecDictionary(www.downloadHandler.text.Split('\n')));
             }
         }
@@ -138,5 +148,23 @@ public static class GoogleSheetLoader
 
         //Debug.Log("ItemSpecList로의 파싱이 완료되었습니다.");
         return result;
+    }
+
+    private static string GetItemSheetURL(Sheets sheet)
+    {
+        string gid = "";
+
+        switch (sheet)
+        {
+            case Sheets.WEAPON: gid = GID_WEAPON; break;
+            case Sheets.EQUIPMENT: gid = GID_EQUIPMENT; break;
+            case Sheets.FOOD: gid = GID_FOOD; break;
+            case Sheets.MISC: gid = GID_MISC; break;
+            case Sheets.BAG: gid = GID_BAG; break;
+            case Sheets.GEM: gid = GID_GEM; break;
+            default: gid = GID_WEAPON; break;
+        }
+
+        return $"https://docs.google.com/spreadsheets/d/e/2PACX-1vQLgdf4HJcBCjMIQLWNSTqchySCpzpHIArTWuIwHjYYCV1S4K_j5kDtZ9sp47hDLDPhyHF7D2nXoKdO/pub?gid={gid}&single=true&output=tsv";
     }
 }
