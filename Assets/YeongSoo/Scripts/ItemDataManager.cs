@@ -1,11 +1,8 @@
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using Newtonsoft.Json;
-using System;
-using static UnityEditor.Progress;
-using System.Linq;
-using UnityEditorInternal.Profiling.Memory.Experimental;
 
 /// <summary>
 /// ItemSpecID는, 아이템의 이미지나 이름, 스펙 등 정보를 올바르게 초기화해주기 위한 값이고
