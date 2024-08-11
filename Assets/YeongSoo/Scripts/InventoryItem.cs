@@ -66,8 +66,8 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         // 현재 아이템의 원래 부모(셀)를 찾고, 위치를 초기화
         Transform originalParent = Inventory.Instance.GetInventoryCellByPos(itemData.currentCellPos).transform;
-        transform.SetParent(originalParent);
-        rectTransform.anchoredPosition = Vector2.zero;
+        transform.SetParent(Inventory.Instance.contents.transform);
+        rectTransform.anchoredPosition = Inventory.Instance.GetInventoryCellByPos(itemData.currentCellPos).transform.localPosition;
     }
 
     // 빈 셀에 드롭했을 때 처리하는 메서드
