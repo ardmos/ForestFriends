@@ -190,7 +190,6 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             {
                 if (itemShapeArray[x, y] == '1')
                 {
-                    Debug.Log($"x,y : {x},{y}, pos : {new Vector2((x * Inventory.CELL_SIZE - areaCenterOffset), -(y * Inventory.CELL_SIZE - areaCenterOffset))}");
                     // 1일 경우 해당 포지션에 터치 가능 영역 생성
                     GameObject touchAreaObject = Instantiate(touchAreaPrefab, touchAreas.transform);
                     touchAreaObject.transform.localPosition = new Vector2((x * Inventory.CELL_SIZE - areaCenterOffset), -(y * Inventory.CELL_SIZE - areaCenterOffset));
