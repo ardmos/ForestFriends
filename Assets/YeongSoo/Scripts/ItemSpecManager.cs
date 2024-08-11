@@ -39,7 +39,7 @@ public static class ItemSpecManager
 
                 if (task.success)
                 {
-                    Debug.Log("아이템 스펙 데이터 다운로드를 성공했습니다!");
+                    //Debug.Log("아이템 스펙 데이터 다운로드를 성공했습니다!");
 
                     Dictionary<int, ItemSpec> dictionary = GetDictionaryBySheetName(sheetName);
                     if (dictionary == null)
@@ -79,7 +79,7 @@ public static class ItemSpecManager
             string json = JsonConvert.SerializeObject(dictionaryToSave, Formatting.Indented);
             // JSON 문자열을 파일로 저장
             File.WriteAllText(GetFilePath(sheetName), json);
-            Debug.Log($"아이템 스펙 데이터를 JSON 파일로 저장했습니다. {GetFilePath(sheetName)}");
+            //Debug.Log($"아이템 스펙 데이터를 JSON 파일로 저장했습니다. {GetFilePath(sheetName)}");
         }
         catch (Exception e)
         {

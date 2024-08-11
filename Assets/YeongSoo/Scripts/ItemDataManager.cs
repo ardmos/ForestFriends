@@ -29,11 +29,11 @@ public static class ItemDataManager
                 string json = File.ReadAllText(filePath);
                 playerItems = JsonConvert.DeserializeObject<List<ItemData>>(json);
 
-                Debug.Log($"JSON 파일을 찾았습니다. 플레이어가 소지한 아이템 데이터 리스트를 반환합니다. {json}");
+                Debug.Log($"플레이어 소지 아이템 목록을 찾았습니다. {json}");
 
                 foreach (ItemData itemData in playerItems)
                 {
-                    Debug.Log($"playerItems : {itemData}");
+                    //Debug.Log($"playerItems : {itemData}");
 
                     AddToPlayerItemDictionary(itemData);
                 }

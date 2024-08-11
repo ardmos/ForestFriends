@@ -48,7 +48,7 @@ public static class GoogleSheetLoader
     {
         using (UnityWebRequest www = UnityWebRequest.Get(GetItemSheetURL(sheetName)))
         {
-            Debug.Log("아이템 스펙 데이터 다운로드를 시작합니다");
+            //Debug.Log("아이템 스펙 데이터 다운로드를 시작합니다");
             var webRequestOpration = www.SendWebRequest();
 
             while (!webRequestOpration.isDone)
@@ -62,7 +62,7 @@ public static class GoogleSheetLoader
             else
             {
                 Debug.Log($"{sheetName}아이템 스펙 데이터 다운로드를 성공했습니다.");
-                Debug.Log($"{www.downloadHandler.text}");
+                //Debug.Log($"{www.downloadHandler.text}");
                 return (true, ParshingSheetDataToItemSpecDictionary(www.downloadHandler.text.Split('\n')));
             }
         }

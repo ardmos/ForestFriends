@@ -66,11 +66,11 @@ public class Inventory : MonoBehaviour
         {
             playerItems = ItemDataManager.LoadItemsFromJson();
 
-            Debug.Log($"playerItems.Count {playerItems.Count}");
+            //Debug.Log($"playerItems.Count {playerItems.Count}");
 
             foreach (ItemData itemData in playerItems)
             {
-                Debug.Log(itemData.itemSpec.itemName);
+                //Debug.Log(itemData.itemSpec.itemName);
                 InstantiateItem(itemData);
             }
         }
