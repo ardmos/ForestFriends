@@ -1,6 +1,7 @@
 [System.Serializable]
 public class ItemSpec
 {
+    public GoogleSheetLoader.Sheets sheetName;
     // 아이템 스펙
     public int itemSpecID; // 아이템 스펙 데이터의 고유 값
     public string itemName;
@@ -17,6 +18,7 @@ public class ItemSpec
 
     public ItemSpec()
     {
+        sheetName = GoogleSheetLoader.Sheets.WEAPON;
         itemSpecID = -1;
         itemName = string.Empty;
         itemPrice = 0;

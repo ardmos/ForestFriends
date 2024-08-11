@@ -10,6 +10,7 @@ public class GameAssetManager : MonoBehaviour
     public static GameAssetManager Instance { get; private set; }
 
     public WeaponAssets weaponAssets;
+    public BagAssets bagAssets;
 
     private void Awake()
     {
@@ -21,6 +22,18 @@ public class GameAssetManager : MonoBehaviour
         else
         {
             Destroy(gameObject);
+        }
+    }
+
+    public Sprite GetItemImageBySpecID(GoogleSheetLoader.Sheets sheetName, int itemSpecID)
+    {
+        switch (sheetName)
+        {
+            case GoogleSheetLoader.Sheets.WEAPON:
+                return weaponAssets.GetWeaponImageBySpecID(itemSpecID);
+            case GoogleSheetLoader.Sheets.BAG:
+                return bagAssets.GetBagImageBySpecID(itemSpecID);
+            default: return null;
         }
     }
 }

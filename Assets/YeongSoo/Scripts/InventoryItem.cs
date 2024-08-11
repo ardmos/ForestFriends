@@ -140,7 +140,8 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     // 아이템의 이미지를 초기화하는 메서드 입니다
     private void InitItemImage()
     {
-        itemImage.sprite = GameAssetManager.Instance.weaponAssets.GetWeaponImageBySpecID(itemData.itemSpec.itemSpecID);
+        itemImage.sprite = GameAssetManager.Instance.GetItemImageBySpecID(itemData.itemSpec.sheetName, itemData.itemSpec.itemSpecID);
+        // 가방 추가 기능.  여기까지 함.
     }
 
     // 아이템 점유 영역을 업데이트하는 메서드 입니다

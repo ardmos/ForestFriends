@@ -63,12 +63,12 @@ public static class GoogleSheetLoader
             {
                 Debug.Log($"{sheetName}아이템 스펙 데이터 다운로드를 성공했습니다.");
                 //Debug.Log($"{www.downloadHandler.text}");
-                return (true, ParshingSheetDataToItemSpecDictionary(www.downloadHandler.text.Split('\n')));
+                return (true, ParshingSheetDataToItemSpecDictionary(www.downloadHandler.text.Split('\n'), sheetName));
             }
         }
     }
 
-    private static Dictionary<int, ItemSpec> ParshingSheetDataToItemSpecDictionary(string[] rows)
+    private static Dictionary<int, ItemSpec> ParshingSheetDataToItemSpecDictionary(string[] rows, GoogleSheetLoader.Sheets sheetName)
     {
         if (rows.Length == 0) return null;
 
@@ -81,6 +81,8 @@ public static class GoogleSheetLoader
             //Debug.Log("======================================");
 
             ItemSpec itemSpec = new ItemSpec();
+
+            itemSpec.sheetName = sheetName;
 
             string[] columns = rows[lineNum].Split('\t');
             // Item Spec ID

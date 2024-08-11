@@ -45,3 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponAssets: {fileID: 11400000, guid: c2f08e373c184ef4596d288ab1f34370, type: 2}
+  bagAssets: {fileID: 11400000, guid: 8ea67f340145ae241b8ae574052bffec, type: 2}
