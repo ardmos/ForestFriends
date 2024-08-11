@@ -11,11 +11,12 @@ public class Inventory : MonoBehaviour
     public static Inventory Instance;
     private const float CELL_SIZE = 100f;
 
-    public int width; // 인벤토리의 너비
-    public int height; // 인벤토리의 높이
+    public int widthCellCount; // 인벤토리의 너비
+    public int heightCellCount; // 인벤토리의 높이
     public GameObject cellPrefab; // 셀 프리팹을 할당하는 변수
     public GameObject itemPrefab; // 아이템 프리팹을 할당하는 변수
     public Canvas mainCanvas;
+    public GameObject contents; // 아이템 컨텐츠들의 부모 모브젝트
 
     private InventoryCell[,] cells; // 인벤토리 셀을 저장하는 2차원 배열
     private Vector2 gridOffset; // 그리드가 오브젝트를 중앙에 두고 형성되도록 위치를 보정해주는 변수
@@ -30,13 +31,11 @@ public class Inventory : MonoBehaviour
     private async void Start()
     {
         // 인벤토리 그리드와 셀 배열을 초기화
-        cells = new InventoryCell[width, height];
-        CalculateGridOffset(); // 그리드 오프셋 계산
-        CreateGrid(); // 그리드 생성 
-
+        cells = new InventoryCell[widthCellCount, heightCellCount];
+        // 그리드 생성 
+        CreateGrid(); 
         // 1. 구글시트에서 아이템 스펙 정보를 로드한다.  <실제로는 게임 시작시 로드해야함>
         await ItemSpecManager.LoadItemSpecs();
-
         // 2. 로드한 정보를 바탕으로 아이템을 로드한다.
         LoadItems(); // 아이템 로드
     }
@@ -82,28 +81,25 @@ public class Inventory : MonoBehaviour
     // 그리드의 위치 오프셋을 계산하는 메서드
     private void CalculateGridOffset()
     {
-        float gridWidth = width * CELL_SIZE;
-        float gridHeight = height * CELL_SIZE;
-        gridOffset = new Vector2(-gridWidth / 2f + CELL_SIZE / 2f, gridHeight / 2f - CELL_SIZE / 2f);
+        // 그리드의 전체 크기 계산
+        float gridWidth = widthCellCount * CELL_SIZE;
+        float gridHeight = heightCellCount * CELL_SIZE;
+        // 그리드의 시작 위치 계산 (중앙에서 그리드의 절반 크기만큼 이동)
+        gridOffset = new Vector2(-gridWidth / 2f + CELL_SIZE / 2, gridHeight / 2f - CELL_SIZE / 2);
     }
 
     // 인벤토리 그리드를 생성하는 메서드
     private void CreateGrid()
     {
-        // 그리드의 전체 크기 계산
-        float gridWidth = width * CELL_SIZE;
-        float gridHeight = height * CELL_SIZE;
+        CalculateGridOffset(); // 그리드 오프셋 계산
 
-        // 그리드의 시작 위치 계산 (중앙에서 그리드의 절반 크기만큼 이동)
-        Vector2 startPosition = new Vector2(-gridWidth / 2f + 25f, gridHeight / 2f - 25f);
-
-        for (int x = 0; x < width; x++)
+        for (int x = 0; x < widthCellCount; x++)
         {
-            for (int y = 0; y < height; y++)
+            for (int y = 0; y < heightCellCount; y++)
             {
                 // 셀 프리팹을 인스턴스화하고 위치 설정
-                GameObject cellObject = Instantiate(cellPrefab, transform);
-                cellObject.GetComponent<RectTransform>().anchoredPosition = startPosition + new Vector2(x * CELL_SIZE, -y * CELL_SIZE);
+                GameObject cellObject = Instantiate(cellPrefab, contents.transform);
+                cellObject.GetComponent<RectTransform>().anchoredPosition = gridOffset + new Vector2(x * CELL_SIZE, -y * CELL_SIZE);
                 //Debug.Log($"그리드 셀을 그립니다. cell(x:{x},y{y}), anchoredPos : {cellObject.GetComponent<RectTransform>().anchoredPosition}");
                 InventoryCell cell = cellObject.GetComponent<InventoryCell>();
                 cells[x, y] = cell;
@@ -118,7 +114,7 @@ public class Inventory : MonoBehaviour
         int x = (int)newItemData.currentCellPos.x;
         int y = (int)newItemData.currentCellPos.y;
 
-        if (x >= 0 && x < width && y >= 0 && y < height)
+        if (x >= 0 && x < widthCellCount && y >= 0 && y < heightCellCount)
         {
             GameObject itemObject = Instantiate(itemPrefab, cells[x, y].transform);
 
@@ -142,9 +138,9 @@ public class Inventory : MonoBehaviour
     /// <returns>true 성공, false 실패</returns>
     public (bool success, Vector2 cellPosition) GetEmptyInventoryCellPos()
     {
-        for (int y = 0; y < height; y++)
+        for (int y = 0; y < heightCellCount; y++)
         {
-            for (int x = 0; x < width; x++)
+            for (int x = 0; x < widthCellCount; x++)
             {
                 if (cells[x, y].GetOccupyingItem() == null)
                 {

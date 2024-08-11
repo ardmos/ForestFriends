@@ -356,10 +356,10 @@ namespace RealToon.GUIInspector
         "Color saturation of the object." ,
 
         //Width [27] [Outline]
-        "Outline main width." ,
+        "Outline main widthCellCount." ,
 
         //Width Control [28] [Outline]
-        "Controls the 'Outline Width' using texture Map.\n\nUse a Black and White texture map.\nWhite means 1 while Black means 0.\nThis will not work if the Outline main width value is 0." ,
+        "Controls the 'Outline Width' using texture Map.\n\nUse a Black and White texture map.\nWhite means 1 while Black means 0.\nThis will not work if the Outline main widthCellCount value is 0." ,
 
         //Outline Extrude Method [29]
         "Outline Extrude Methods.\n\nNormal - The outline extrusion will be based on normal direction.\n\nOrigin - The outline extrusion will be based on the center of the object." ,
@@ -392,7 +392,7 @@ namespace RealToon.GUIInspector
         "The maximum 'Outline Width' limit when moving far from the object." ,
 
         //Vertex Color Blue Affect Outline Width [39] [Outline]
-        "'Vertex Color Blue' will affect the Outline Width.\n\nThis will not work if the Outline main width value is 0.\nBlue means 1 while Black means 0." ,
+        "'Vertex Color Blue' will affect the Outline Width.\n\nThis will not work if the Outline main widthCellCount value is 0.\nBlue means 1 while Black means 0." ,
 
         //Intensity [40] [SelfLit]
         "'Self Lit' intensity." ,
