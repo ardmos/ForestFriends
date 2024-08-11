@@ -48,7 +48,10 @@ public static class ItemSpecManager
                         return;
                     }
 
-                    dictionary = task.itemSpecDictionary;
+                    foreach (var kvp in task.itemSpecDictionary)
+                    {
+                        dictionary[kvp.Key] = kvp.Value; // GetDictionaryBySheetName로 반환받은 딕셔너리에 새로운 값을 업데이트
+                    }
                     SaveItemSpecsToJson(sheetName, dictionary);
                 }
                 else
@@ -158,7 +161,7 @@ public static class ItemSpecManager
         {
             return itemSpec;
         }
-        Debug.LogWarning($"ItemSpec with ItemSpecID {itemSpecID} not found.");
+        Debug.LogWarning($"{sheetName} ItemSpec with ItemSpecID {itemSpecID} not found.");
         return null;
     }
 
