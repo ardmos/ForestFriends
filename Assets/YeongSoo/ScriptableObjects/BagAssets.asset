@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bagImages:
   - {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  - {fileID: 21300000, guid: 312ae805040a0d949b2180ab543862d3, type: 3}
+  - {fileID: 21300000, guid: 999e908e7fbb97843b3d66febb574051, type: 3}

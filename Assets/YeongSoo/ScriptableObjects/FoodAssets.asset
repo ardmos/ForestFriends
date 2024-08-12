@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   foodImages:
   - {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  - {fileID: 21300000, guid: 1b79252af2d890f4f9543a6fc4f0c930, type: 3}
+  - {fileID: 21300000, guid: 0f34d723fb56fed4e84921d1b5307ea4, type: 3}
+  - {fileID: 21300000, guid: c10a9a99c0ce0364bbcc230e9d9cc33b, type: 3}

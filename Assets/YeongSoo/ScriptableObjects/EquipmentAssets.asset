@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   equipmentImages:
   - {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  - {fileID: 21300000, guid: 08aafc1f24da5934c82dd1b10254d69e, type: 3}
+  - {fileID: 21300000, guid: 2b6c91f58e7c1ca4ca1c4217ec9bfd88, type: 3}
