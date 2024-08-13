@@ -18,7 +18,6 @@ public class Inventory : MonoBehaviour
     public Canvas mainCanvas;
     public GameObject cells; // 셀들의 부모 오브젝트
     public GameObject contents; // 아이템 컨텐츠들의 부모 오브젝트
-    public GameObject inventorySlots; // 셀에 가방이 배치됐을 시 활성화되는 아이템 배치 가능 슬롯 표시 오브젝트들의 부모 오브젝트
 
     private InventoryCell[,] cellArray; // 인벤토리 셀을 저장하는 2차원 배열
     private Vector2 gridOffset; // 그리드가 오브젝트를 중앙에 두고 형성되도록 위치를 보정해주는 변수

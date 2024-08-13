@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 public class InventoryCell : MonoBehaviour
 {
     [SerializeField] private InventoryItem occupyingItem = null; // 현재 셀에 있는 아이템
+    [SerializeField] private bool isBagSlot = false; // 이 셀이 가방의 슬롯인지 여부를 저장하는 변수
     public InventoryCellDragHandler inventoryCellDragHandler;
     public Vector2 cellPos = Vector2.zero;
 
@@ -20,6 +21,17 @@ public class InventoryCell : MonoBehaviour
     {
         occupyingItem = null;
     }
+
+    public void SetIsBagSlot(bool value)
+    {
+        isBagSlot = value;
+    }
+
+    public bool GetIsBagSlot() 
+    {  
+        return isBagSlot; 
+    }
+
 
     // 하이라이트 기능
     /*// 셀의 배경 이미지를 나타내는 변수

@@ -149,6 +149,7 @@ public static class ItemDataManager
     /// </summary>
     private static string GetFilePath()
     {
+        Debug.Log($"GetFilePath() : {Path.Combine(Application.persistentDataPath, JSON_FILE_PATH)}");
         return Path.Combine(Application.persistentDataPath, JSON_FILE_PATH);
     }
 
