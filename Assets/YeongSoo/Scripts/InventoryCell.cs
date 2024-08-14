@@ -11,7 +11,10 @@ public class InventoryCell : MonoBehaviour
     public InventoryCellDragHandler inventoryCellDragHandler;
     public Vector2 cellPos = Vector2.zero;
 
-    public InventoryItem GetOccupyingItem() { return occupyingItem; }
+    public InventoryItem GetOccupyingItem() 
+    { 
+        return occupyingItem; 
+    }
     public void SetOccupyingItem(InventoryItem occupyingItem) 
     {
         //Debug.Log($"cell:{cellPos}의 occupingItem 데이터가 설정됩니다");

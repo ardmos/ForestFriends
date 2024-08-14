@@ -58,19 +58,20 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             return;
         }
 
-        // 드롭한 위치가 빈 인벤토리 셀인지 확인
-        if (eventData.pointerEnter.TryGetComponent<InventoryCellDragHandler>(out InventoryCellDragHandler inventoryCellDragHandler))
+        // 드롭한 위치에 이미 배치된 아이템이 있는 경우
+        if (eventData.pointerEnter.GetComponentInParent<InventoryItem>())
+        {
+            HandleOccupiedCellDrop(eventData.pointerEnter.GetComponentInParent<InventoryItem>());
+        }
+        // 드롭한 위치가 배치 가능한 인벤토리 셀인 경우. (InventoryCell이며 동시에 BagSlot)
+        else if (eventData.pointerEnter.TryGetComponent<InventoryCellDragHandler>(out InventoryCellDragHandler inventoryCellDragHandler) && inventoryCellDragHandler.inventoryCell.GetIsBagSlot())
         {
             HandleEmptyCellDrop(inventoryCellDragHandler);
         }
-        // 드롭한 위치에 아이템이 존재하는지 확인
-        else if (eventData.pointerEnter.TryGetComponent<InventoryItem>(out InventoryItem occupyingItem))
-        {
-            HandleOccupiedCellDrop(occupyingItem);
-        }
-        // 드롭한 위치가 인벤토리 셀이 아닌 경우
+        // 드롭한 위치가 빈 공간은 아니지만, 아이템을 배치할 수 없는 공간인 모든 경우
         else
         {
+            Debug.Log($"아이템이 놓인 위치: {eventData.pointerEnter.gameObject.name}");
             HandleInvalidDropLocation();
         }
     }
@@ -93,6 +94,14 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     // 이미 아이템이 있는 셀에 드롭했을 때 처리하는 메서드
     private void HandleOccupiedCellDrop(InventoryItem occupyingItem)
     {
+        // 아이템 크기가 동일한 경우만 교환 처리
+        if (occupyingItem.GetItemData().itemSpec.itemShape != itemData.itemSpec.itemShape)
+        {
+            Debug.Log($"아이템 모양이 다르기 때문에 위치 교환이 진행되지 않습니다");
+            ReturnToOriginalPosition();
+            return;
+        }
+
         // 현재 아이템과 교환할 셀을 찾아서 아이템 교환 처리
         InventoryCellDragHandler occupiedCell = Inventory.Instance.GetInventoryCellByPos(occupyingItem.itemData.currentCellPos).inventoryCellDragHandler;
         occupiedCell.OnSwapItems(this);

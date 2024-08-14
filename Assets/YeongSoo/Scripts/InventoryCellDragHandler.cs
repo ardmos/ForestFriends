@@ -10,7 +10,7 @@ public class InventoryCellDragHandler : MonoBehaviour
 {
     public InventoryCell inventoryCell;
 
-    // 비어있는 셀에 아이템이 배치될 때
+    // 셀에 아이템을 배치하는 메서드
     public void OnDrop(InventoryItem draggedItem)
     {
         // 기존 셀에 있는 occupied아이템 정보 제거
@@ -20,7 +20,7 @@ public class InventoryCellDragHandler : MonoBehaviour
         SetItemOnCurrentCell(draggedItem);
     }
 
-    // 드래그된 셀에 기존에 아이템이 존재할 때. 현 아이템과 draggedItem의 위치를 교환합니다
+    // 현 아이템과 draggedItem의 위치를 교환하는 메서드. (드래그된 셀에 기존에 아이템이 존재할 때)
     public void OnSwapItems(InventoryItem draggedItem)
     {
         // draggedItem의 기존 위치에 현 아이템을 배치시킨다
