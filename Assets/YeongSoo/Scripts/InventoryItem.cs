@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -12,8 +13,10 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public GameObject touchAreas;
     public GameObject touchAreaPrefab;
 
+    [SerializeField] private bool isBag;
     private ItemData itemData;
     private Vector2 originalPosition;
+    private Transform originalParent;
     private Canvas mainCanvas;
     // 5x5 배열 형태로 가공된 아이템 형상 정보를 담을 변수
     private char[,] itemShapeArray;
@@ -21,6 +24,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public void OnBeginDrag(PointerEventData eventData)
     {
         originalPosition = rectTransform.anchoredPosition;
+        originalParent = transform.parent;
         canvasGroup.blocksRaycasts = false; // 드래그 중일 때 다른 셀의 상호작용을 방해하지 않도록 설정
 
         transform.SetParent(mainCanvas.transform);
@@ -58,31 +62,89 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             return;
         }
 
-        // 드롭한 위치에 이미 배치된 아이템이 있는 경우
-        if (eventData.pointerEnter.GetComponentInParent<InventoryItem>())
+
+        // 마우스 위치에 레이캐스트 발사
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, results);
+
+        InventoryCellDragHandler cellDragHandler = null;
+        InventoryCell cell = null;
+
+        foreach (RaycastResult result in results)
         {
-            HandleOccupiedCellDrop(eventData.pointerEnter.GetComponentInParent<InventoryItem>());
+            if(eventData.pointerEnter.TryGetComponent<InventoryCellDragHandler>(out InventoryCellDragHandler inventoryCellDragHandler))
+            {
+                cellDragHandler = inventoryCellDragHandler;
+                cell = inventoryCellDragHandler.inventoryCell;
+            }
         }
-        // 드롭한 위치가 배치 가능한 인벤토리 셀인 경우. (InventoryCell이며 동시에 BagSlot)
-        else if (eventData.pointerEnter.TryGetComponent<InventoryCellDragHandler>(out InventoryCellDragHandler inventoryCellDragHandler) && inventoryCellDragHandler.inventoryCell.GetIsBagSlot())
+
+        if(cell == null)
         {
-            HandleEmptyCellDrop(inventoryCellDragHandler);
+            Debug.Log("현 드랍 위치에 셀이 검색되지 않았습니다.");
+            HandleInvalidDropLocation();
+            return;
         }
-        // 드롭한 위치가 빈 공간은 아니지만, 아이템을 배치할 수 없는 공간인 모든 경우
+
+        // 가방 영역 아이템 배치. 기능 구현중 중간 저장
+/*
+        // 현 아이템이 가방인 경우
+        if (isBag)
+        {
+            // 점유중인 가방이 자신인 경우 선택된 셀로 중심 이동 ( 추후 이동불가지역 필터링시 조건 추가 필요)
+            if (cell.GetOccupyingBag() == this)
+            {
+                Debug.Log("현 가방 자신입니다.");
+                HandleEmptyCellDrop(cellDragHandler);
+            }
+            // 점유중인 가방이 없는 경우
+            else if (cell.GetOccupyingBag() == null)
+            {
+                HandleEmptyCellDrop(cellDragHandler);
+            }
+            // 점유중인 가방이 있는 경우
+            else
+            {
+                HandleOccupiedCellDrop(cell.GetOccupyingBag());
+            }
+        }
+        // 가방 이외의 아이템인 경우
         else
         {
-            Debug.Log($"아이템이 놓인 위치: {eventData.pointerEnter.gameObject.name}");
-            HandleInvalidDropLocation();
-        }
+            // 드롭한 위치가 가방의 영역인지 확인
+            if (cell.GetIsBagSlot())
+            {
+                // 점유중인 아이템이 현 아이템인 경우 드랍된 셀의 위치로 중심 이동
+                if (cell.GetOccupyingItem() == this)        
+                {
+                    Debug.Log("현 아이템 자신입니다.");
+                    HandleEmptyCellDrop(cellDragHandler);
+                }
+                // 비어있는 가방 슬롯인 경우
+                else if (cell.GetOccupyingItem() == null)
+                {
+                    HandleEmptyCellDrop(cellDragHandler);
+                }
+                // 현 아이템 이외의 점유중인 아이템이 있는 경우
+                else
+                {
+                    HandleOccupiedCellDrop(cell.GetOccupyingItem());
+                }
+            }
+            // 드롭한 위치가 빈 공간은 아니지만, 아이템을 배치할 수 없는 공간인 모든 경우
+            else
+            {
+                Debug.Log($"아이템이 놓인 위치: {eventData.pointerEnter.gameObject.name}");
+                HandleInvalidDropLocation();
+            }
+        }*/
     }
 
     // 아이템을 원래 위치로 되돌리는 메서드
     private void ReturnToOriginalPosition()
     {
-        // 현재 아이템의 원래 부모(셀)를 찾고, 위치를 초기화
-        Transform originalParent = Inventory.Instance.GetInventoryCellByPos(itemData.currentCellPos).transform;
-        transform.SetParent(Inventory.Instance.contents.transform);
-        rectTransform.anchoredPosition = Inventory.Instance.GetInventoryCellByPos(itemData.currentCellPos).transform.localPosition;
+        transform.SetParent(originalParent);
+        rectTransform.anchoredPosition = originalPosition;
     }
 
     // 빈 셀에 드롭했을 때 처리하는 메서드
@@ -121,6 +183,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         this.mainCanvas = canvas;
         this.itemData = itemData;
+        isBag = itemData.itemSpec.sheetName == GoogleSheetLoader.Sheets.BAG;
         InitItemShapeArrayData();
         InitItemImage();
         InitTouchArea();
@@ -129,6 +192,11 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public ItemData GetItemData()
     {
         return this.itemData;
+    }
+
+    public bool GetIsBag()
+    {
+        return isBag;
     }
 
     public void SetNewCurrentCellPos(Vector2 newPos)
@@ -167,7 +235,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         // 가방 추가 기능.  여기까지 함.
     }
 
-    // 아이템 점유 영역을 업데이트하는 메서드 입니다
+    // 아이템 점유 사실을 해당 영역 셀들에게 업데이트하는 메서드 입니다
     public void UpdateItemArea()
     {
         // itemShapeArray 입장에선 [2,2]가 현 아이템의 중심. 
@@ -187,18 +255,21 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
                 // offset이 적용된 최종 포지션을 담을 Vector2 변수
                 Vector2 actualCellPos = offset + new Vector2(x, y); // offest이 적용된 최정 포지션을 담습니다
 
-                //Debug.Log($"itemShapeArray[x,y]:{itemShapeArray[x, y]}");
+                // 1일 경우 해당 셀에 점유 설정
                 if (itemShapeArray[x,y] == '1')
                 {
-                    //Debug.Log($"셀에 아이템{itemData.itemSpec.itemName} 점유 설정! cellPos:{actualCellPos}");
-                    // 1일 경우 해당 셀에 점유 설정
-                    Inventory.Instance.GetInventoryCellByPos(actualCellPos)?.SetOccupyingItem(this);
+                    if(isBag)
+                        Inventory.Instance.GetInventoryCellByPos(actualCellPos)?.SetOccupyingBag(this);
+                    else
+                        Inventory.Instance.GetInventoryCellByPos(actualCellPos)?.SetOccupyingItem(this);
                 }
+                // 0일 경우 해당 셀에 점유 해제
                 else
-                {
-                    //Debug.Log($"셀에 아이템{itemData.itemSpec.itemName} 점유 해제! cellPos:{actualCellPos}");
-                    // 0일 경우 해당 셀에 점유 해제
-                    Inventory.Instance.GetInventoryCellByPos(actualCellPos)?.RemoveOccupyingItem();
+                {                 
+                    if (isBag)
+                        Inventory.Instance.GetInventoryCellByPos(actualCellPos)?.RemoveOccupyingBag();
+                    else
+                        Inventory.Instance.GetInventoryCellByPos(actualCellPos)?.RemoveOccupyingItem();
                 }
             }
         }

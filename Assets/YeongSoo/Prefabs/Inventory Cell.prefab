@@ -225,6 +225,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   occupyingItem: {fileID: 0}
+  occupyingBag: {fileID: 0}
+  isBagSlot: 0
   inventoryCellDragHandler: {fileID: 3587099396915458453}
   cellPos: {x: 0, y: 0}
 --- !u!225 &6078010608120944816
