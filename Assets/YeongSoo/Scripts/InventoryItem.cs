@@ -67,7 +67,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             if(eventData.pointerEnter.TryGetComponent<InventoryCellDragHandler>(out InventoryCellDragHandler inventoryCellDragHandler))
             {
                 cellDragHandler = inventoryCellDragHandler;
-                cell = inventoryCellDragHandler.inventoryCell;
+                cell = inventoryCellDragHandler.GetInventoryCell();
             }
         }
 
@@ -92,6 +92,8 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         InitItemShapeArrayData();
         InitItemImage();
         InitTouchArea();
+        // 아이템 영역 설정 보고
+        Inventory.Instance.UpdateItemArea(this);
     }
 
     public ItemData GetItemData()
@@ -107,6 +109,11 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public void SetNewCurrentCellPos(Vector2 newPos)
     {
         itemData.currentCellPos = newPos;
+    }
+
+    public char[,] GetItemShapeArray()
+    {
+        return itemShapeArray;
     }
 
     /// <summary>

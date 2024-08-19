@@ -19,6 +19,8 @@ public class InventoryCell : MonoBehaviour
     }
     public void SetOccupyingItem(InventoryItem newItem) 
     {
+        if (newItem == null) return;
+
         occupyingItem = newItem;
     }
     public void RemoveOccupyingItem()

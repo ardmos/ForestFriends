@@ -140,11 +140,6 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public void SetItemOnNewCell(Vector2 targetCellPos)
-    {
-            ///////////////////////a 요기부터!
-    }
-
     /// <summary>
     /// 새로운 아이템 추가시 비어있는 셀을 찾아주는 메서드 입니다. 튜플로 결과를 구분지어서 반환해줍니다. 
     /// </summary>
@@ -236,15 +231,15 @@ public class Inventory : MonoBehaviour
     // 빈 셀에 드롭했을 때 처리하는 메서드
     private void HandleEmptyCellDrop(InventoryCellDragHandler emptyCell, InventoryItem droppedItem)
     {
-        if (draggedItem.GetIsBag())
+        if (droppedItem.GetIsBag())
         {
             // 기존 셀에 있는 occupied가방 정보 제거
-            Inventory.Instance.GetInventoryCellByPos(draggedItem.GetItemData().currentCellPos).RemoveOccupyingBag();
+            Inventory.Instance.GetInventoryCellByPos(droppedItem.GetItemData().currentCellPos).RemoveOccupyingBag();
         }
         else
         {
             // 기존 셀에 있는 occupied아이템 정보 제거
-            Inventory.Instance.GetInventoryCellByPos(draggedItem.GetItemData().currentCellPos).RemoveOccupyingItem();
+            Inventory.Instance.GetInventoryCellByPos(droppedItem.GetItemData().currentCellPos).RemoveOccupyingItem();
         }
 
         emptyCell.OnDrop(droppedItem);
@@ -253,11 +248,13 @@ public class Inventory : MonoBehaviour
     // 이미 아이템이 있는 셀에 드롭했을 때 처리하는 메서드
     private void HandleOccupiedCellDrop(InventoryItem occupyingItem, InventoryItem droppedItem)
     {
+        if(occupyingItem == null || droppedItem == null) { return; }
+
         // 아이템 크기가 동일한 경우만 교환 처리
         if (occupyingItem.GetItemData().itemSpec.itemShape != droppedItem.GetItemData().itemSpec.itemShape)
         {
             Debug.Log($"아이템 모양이 다르기 때문에 위치 교환이 진행되지 않습니다");
-            ReturnToOriginalPosition();
+            ReturnToOriginalPosition(droppedItem);
             return;
         }
 
@@ -283,14 +280,15 @@ public class Inventory : MonoBehaviour
     }
 
     // 아이템 점유 사실을 해당 영역 셀들에게 업데이트하는 메서드 입니다
-    public void UpdateItemArea()
+    // 추후에 이 메서드 실행 전에 배치 가능 여부도 고려해줘야 합니다. 
+    public void UpdateItemArea(InventoryItem inventoryItem)
     {
         // itemShapeArray 입장에선 [2,2]가 현 아이템의 중심. 
         // 따라서 드래그 드랍이 된 셀에서 (-2,-2) 이동한 위치가 itemShapeArray의 [0,0]. 오프셋 값이 됩니다.
         // itemShapeArray의 값이 1인 포지션의 셀들에 아이템 점유 설정을 해줘야 합니다. 0일 경우 점유 해제
 
         // 우선 현 셀의 pos를 얻어옵니다
-        Vector2 currentCellPos = itemData.currentCellPos;
+        Vector2 currentCellPos = inventoryItem.GetItemData().currentCellPos;
         // 현 셀의 포지션과 itemShapeArray 인덱스 사이의 오프셋 값 구하기
         Vector2 offset = currentCellPos - new Vector2(2, 2);
 
@@ -303,22 +301,24 @@ public class Inventory : MonoBehaviour
                 Vector2 actualCellPos = offset + new Vector2(x, y); // offest이 적용된 최정 포지션을 담습니다
 
                 // 1일 경우 해당 셀에 점유 설정
-                if (itemShapeArray[x, y] == '1')
+                if (inventoryItem.GetItemShapeArray()[x, y] == '1')
                 {
-                    if (isBag)
-                        Inventory.Instance.GetInventoryCellByPos(actualCellPos)?.SetOccupyingBag(this);
+                    if (inventoryItem.GetIsBag())
+                        Inventory.Instance.GetInventoryCellByPos(actualCellPos)?.SetOccupyingBag(inventoryItem);
                     else
-                        Inventory.Instance.GetInventoryCellByPos(actualCellPos)?.SetOccupyingItem(this);
+                        Inventory.Instance.GetInventoryCellByPos(actualCellPos)?.SetOccupyingItem(inventoryItem);
                 }
                 // 0일 경우 해당 셀에 점유 해제
                 else
                 {
-                    if (isBag)
+                    if (inventoryItem.GetIsBag())
                         Inventory.Instance.GetInventoryCellByPos(actualCellPos)?.RemoveOccupyingBag();
                     else
                         Inventory.Instance.GetInventoryCellByPos(actualCellPos)?.RemoveOccupyingItem();
                 }
             }
         }
+
+        Debug.Log($"셀 그리드상 아이템 영역 업데이트 완료!");
     }
 }
