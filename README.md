@@ -6,7 +6,7 @@
 https://github.com/user-attachments/assets/5da2c79c-2d59-44de-b49e-0ee6e5af2680
 
 
-ForestFriends는 Backpack Battles에서 영감을 받은 턴제 전략 로그라이크 게임입니다. 플레이어는 제한된 인벤토리 공간에서 아이템을 효율적으로 관리하며 전투를 벌이게 됩니다.
+ForestFriends는 Backpack Battles와 PokeRogue에서 영감을 받은 턴제 전략 로그라이크 게임입니다. 플레이어는 제한된 인벤토리 공간에서 아이템을 효율적으로 관리하며 전투를 벌이게 됩니다.
 
 ## 주요 기능
 
