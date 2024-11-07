@@ -1,9 +1,12 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
-using static GoogleSheetLoader;
 
+/// <summary>
+/// 구글 스프레드시트에서 게임 아이템 데이터를 로드하고 파싱하는 정적 클래스
+/// </summary>
 public static class GoogleSheetLoader
 {
     public enum Sheets
@@ -16,7 +19,7 @@ public static class GoogleSheetLoader
         GEM
     }
 
-    private enum Columns
+    private enum ItemPropertyIndex
     {
         ItemSpecID,
         ItemName,
@@ -32,139 +35,145 @@ public static class GoogleSheetLoader
         ItemShape
     }
 
-    // 특정 시트 gid
-    private const string GID_WEAPON = "1208485493";
-    private const string GID_EQUIPMENT = "1279431268";
-    private const string GID_FOOD = "276662484";
-    private const string GID_MISC = "229270413";
-    private const string GID_BAG = "1179647824";
-    private const string GID_GEM = "961347244";
+    // 각 시트별 GID (구글 스프레드시트 고유 식별자)
+    private static readonly Dictionary<Sheets, string> sheetGIDs = new Dictionary<Sheets, string>
+    {
+        { Sheets.WEAPON, "1208485493" },
+        { Sheets.EQUIPMENT, "1279431268" },
+        { Sheets.FOOD, "276662484" },
+        { Sheets.MISC, "229270413" },
+        { Sheets.BAG, "1179647824" },
+        { Sheets.GEM, "961347244" }
+    };
 
-    // 구글 시트 데이터를 읽어올 때 쓰이는 변수들
-    private static int rowOffset = 5; // 각 아이템들이 5행씩 차지하기 때문에, 다음 아이템을 검색하기 위한 보정값
-    private static int itemShapeColumnOffset = 5; // 아이템 형태 칼럼은 다섯 줄이기 때문에, 전부 읽어오기 위한 보정값.
+    // 데이터 파싱을 위한 상수들
+    private const int itemDataRowSpacing = 5; // 각 아이템이 5행을 차지하므로, 다음 아이템을 검색하기 위한 오프셋
+    private const int itemShapeHeight = itemDataRowSpacing;
+    private const int itemShapeWidth = 5; // 아이템 형태 정보는 시트상에서 (row 5) x (colum 5)로 그 모든 정보를 읽어오기 위한 오프셋입니다
 
+    /// <summary>
+    /// 특정 시트의 데이터를 로드하고 파싱하는 비동기 메서드
+    /// </summary>
+    /// <param name="sheetName">로드할 시트 이름</param>
+    /// <returns>성공 여부와 파싱된 아이템 스펙 딕셔너리</returns>
     public static async Task<(bool success, Dictionary<int, ItemSpec> itemSpecDictionary)> LoadSpecificSheetData(Sheets sheetName)
     {
-        using (UnityWebRequest www = UnityWebRequest.Get(GetItemSheetURL(sheetName)))
+        try 
         {
-            //Debug.Log("아이템 스펙 데이터 다운로드를 시작합니다");
-            var webRequestOpration = www.SendWebRequest();
-
-            while (!webRequestOpration.isDone)
-                await Task.Yield();
-
-            if (www.result != UnityWebRequest.Result.Success)
+            using (UnityWebRequest www = UnityWebRequest.Get(GetItemSheetURL(sheetName)))
             {
-                Debug.LogError($"아이템 스펙 데이터 다운로드를 실패했습니다. {www.error}");
-                return (false, null);
+                var webRequestOpration = www.SendWebRequest();
+
+                // 비동기로 요청 완료 대기
+                while (!webRequestOpration.isDone)
+                    await Task.Yield();
+
+                if (www.result != UnityWebRequest.Result.Success)
+                {
+                    Debug.LogError($"{sheetName}아이템 스펙 데이터 다운로드를 실패했습니다. {www.error}");
+                    return (false, null);
+                }
+                else
+                {
+                    Debug.Log($"{sheetName}아이템 스펙 데이터 다운로드를 성공했습니다.");
+                    return (true, ParshingSheetDataToItemSpecDictionary(www.downloadHandler.text.Split('\n'), sheetName));
+                }
             }
-            else
-            {
-                Debug.Log($"{sheetName}아이템 스펙 데이터 다운로드를 성공했습니다.");
-                //Debug.Log($"{www.downloadHandler.text}");
-                return (true, ParshingSheetDataToItemSpecDictionary(www.downloadHandler.text.Split('\n'), sheetName));
-            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"{sheetName} 데이터 로드 중 오류 발생: {ex.Message}");
+            return (false, null);
         }
     }
 
-    private static Dictionary<int, ItemSpec> ParshingSheetDataToItemSpecDictionary(string[] rows, GoogleSheetLoader.Sheets sheetName)
+    /// <summary>
+    /// 다운로드한 시트 데이터를 ItemSpec 딕셔너리로 파싱하는 메서드
+    /// </summary>
+    /// <param name="sheetDataRows">시트 데이터를 행단위로 나눠둔 배열</param>
+    /// <param name="sheetName">시트 이름</param>
+    /// <returns>파싱된 ItemSpec 딕셔너리</returns>
+    private static Dictionary<int, ItemSpec> ParshingSheetDataToItemSpecDictionary(string[] sheetDataRows, GoogleSheetLoader.Sheets sheetName)
     {
-        if (rows.Length == 0) return null;
-
-        //Debug.Log($"itemSpecList로의 파싱을 시작합니다.");
+        if (sheetDataRows.Length == 0) return null;
 
         Dictionary<int, ItemSpec> result = new Dictionary<int, ItemSpec>();
 
-        for (int lineNum = 1; lineNum < rows.Length; lineNum += rowOffset)
+        for (int rowNum = 1; rowNum < sheetDataRows.Length; rowNum += itemDataRowSpacing)
         {
-            //Debug.Log("======================================");
-
             ItemSpec itemSpec = new ItemSpec();
 
+            // Item Sheet  Name
             itemSpec.sheetName = sheetName;
 
-            string[] columns = rows[lineNum].Split('\t');
+            string[] rowCells = sheetDataRows[rowNum].Split('\t');
             // Item Spec ID
-            //Debug.Log($"Item Spec ID : {columns[(int)Columns.ItemSpecID]}");
-            itemSpec.itemSpecID = StringDataParser.ParseToInt(columns[(int)Columns.ItemSpecID]);
+            itemSpec.itemSpecID = StringDataParser.ParseToInt(rowCells[(int)ItemPropertyIndex.ItemSpecID]);
             // Item Name
-            //Debug.Log($"Item Name : {columns[(int)Columns.ItemName]}");
-            itemSpec.itemName = columns[(int)Columns.ItemName];
+            itemSpec.itemName = rowCells[(int)ItemPropertyIndex.ItemName];
             // Item Price
-            //Debug.Log($"Item Price : {columns[(int)Columns.ItemPrice]}");
-            itemSpec.itemPrice = StringDataParser.ParseToInt(columns[(int)Columns.ItemPrice]);
+            itemSpec.itemPrice = StringDataParser.ParseToInt(rowCells[(int)ItemPropertyIndex.ItemPrice]);
             // Item Description
-            //Debug.Log($"Item Description : {columns[(int)Columns.ItemDescription]}");
-            itemSpec.itemDescription = columns[(int)Columns.ItemDescription];
+            itemSpec.itemDescription = rowCells[(int)ItemPropertyIndex.ItemDescription];
             // Attack
-            //Debug.Log($"Attack : {columns[(int)Columns.Attack]}");
-            itemSpec.attack = StringDataParser.ParseToFloat(columns[(int)Columns.Attack]);
+            itemSpec.attack = StringDataParser.ParseToFloat(rowCells[(int)ItemPropertyIndex.Attack]);
             // Defence
-            //Debug.Log($"Defence : {columns[(int)Columns.Defence]}");
-            itemSpec.defence = StringDataParser.ParseToFloat(columns[(int)Columns.Defence]);
+            itemSpec.defence = StringDataParser.ParseToFloat(rowCells[(int)ItemPropertyIndex.Defence]);
             // Attack Speed
-            //Debug.Log($"Attack Speed : {columns[(int)Columns.AttackSpeed]}");
-            itemSpec.attackSpeed = StringDataParser.ParseToFloat(columns[(int)Columns.AttackSpeed]);
+            itemSpec.attackSpeed = StringDataParser.ParseToFloat(rowCells[(int)ItemPropertyIndex.AttackSpeed]);
             // Healing Amount
-            //Debug.Log($"Healing Amount : {columns[(int)Columns.HealingAmount]}");
-            itemSpec.healingAmount = StringDataParser.ParseToFloat(columns[(int)Columns.HealingAmount]);
+            itemSpec.healingAmount = StringDataParser.ParseToFloat(rowCells[(int)ItemPropertyIndex.HealingAmount]);
             // Item Type
-            //Debug.Log($"Item Type : {columns[(int)Columns.ItemType]}");
-            itemSpec.itemType = columns[(int)Columns.ItemType];
+            itemSpec.itemType = rowCells[(int)ItemPropertyIndex.ItemType];
             // Type Main Stat
-            //Debug.Log($"Type Main Stat : {columns[(int)Columns.TypeMainStat]}");
-            itemSpec.typeMainStat = columns[(int)Columns.TypeMainStat];
+            itemSpec.typeMainStat = rowCells[(int)ItemPropertyIndex.TypeMainStat];
             // Type Sub Stat
-            //Debug.Log($"Type Sub Stat : {columns[(int)Columns.TypeSubStat]}");
-            itemSpec.typeSubStat = columns[(int)Columns.TypeSubStat];
+            itemSpec.typeSubStat = rowCells[(int)ItemPropertyIndex.TypeSubStat];
+            // Item Shape
+            itemSpec.itemShape = ParseItemShape(sheetDataRows, rowNum);
 
-            // 아이템 형태 정보는 첫 번째 ~ 다섯번째 줄까지. 5x5사이즈로 존재. 
-            // 아이템 형태 정보 읽어오기
-            //Debug.Log("Item Shape : ");
-            string itemShape = "";
-
-            for (int r = lineNum; r < lineNum + rowOffset; r++)
-            {
-                if (r >= rows.Length)
-                {
-                    //Debug.Log($"row line num:{r} 데이터의 끝 입니다.");
-                    break;
-                }
-                
-                columns = rows[r].Split('\t');
-                for (int c = (int)Columns.ItemShape; c < (int)Columns.ItemShape + itemShapeColumnOffset; c++)
-                {
-                    if (columns[c] == "o") 
-                        itemShape += "1"; // 아이템이 존재하는 칸인 경우 1로 처리
-                    else
-                        itemShape += "0"; // 빈칸은 0으로 처리
-                }              
-            }
-            itemSpec.itemShape = itemShape;
             result.Add(itemSpec.itemSpecID, itemSpec);
-
-            //Debug.Log(itemShape);
-            //Debug.Log("======================================");
         }
 
-        //Debug.Log("ItemSpecList로의 파싱이 완료되었습니다.");
         return result;
     }
 
+    /// <summary>
+    /// 아이템 형태 정보를 파싱하는 메서드.
+    /// itemShapeHeight x itemShapeWidth형태로 이루어져있는 정보를 문자열 형태로 변경해 반환합니다.
+    /// </summary>
+    /// <param name="sheetDataRows">시트의 전체 행 데이터</param>
+    /// <param name="shapeStartRow">itemShapeHeight x itemShapeWidth 형태 데이터의 시작지점 행 번호</param>
+    /// <returns>파싱된 아이템 형태 문자열</returns>
+    private static string ParseItemShape(string[] sheetDataRows, int shapeStartRow)
+    {
+        string itemShape = "";
+      
+        for (int rowNum = shapeStartRow; rowNum < shapeStartRow + itemShapeHeight; rowNum++)
+        {
+            if (rowNum >= sheetDataRows.Length) break;
+
+            string[] rowCells = sheetDataRows[rowNum].Split('\t');
+
+            for (int columnNum = (int)ItemPropertyIndex.ItemShape; columnNum < (int)ItemPropertyIndex.ItemShape + itemShapeWidth; columnNum++)
+            {
+                itemShape += (rowCells[columnNum] == "o") ? "1" : "0";
+            }
+        }
+
+        return itemShape;
+    }
+
+    /// <summary>
+    /// 특정 시트의 URL을 반환하는 메서드
+    /// </summary>
+    /// <param name="sheet">시트 종류</param>
+    /// <returns>해당 시트의 URL</returns>
     private static string GetItemSheetURL(Sheets sheet)
     {
-        string gid = "";
-
-        switch (sheet)
+        if (!sheetGIDs.TryGetValue(sheet, out string gid))
         {
-            case Sheets.WEAPON: gid = GID_WEAPON; break;
-            case Sheets.EQUIPMENT: gid = GID_EQUIPMENT; break;
-            case Sheets.FOOD: gid = GID_FOOD; break;
-            case Sheets.MISC: gid = GID_MISC; break;
-            case Sheets.BAG: gid = GID_BAG; break;
-            case Sheets.GEM: gid = GID_GEM; break;
-            default: gid = GID_WEAPON; break;
+            gid = sheetGIDs[Sheets.WEAPON]; // 기본값으로 WEAPON 시트 사용
         }
 
         return $"https://docs.google.com/spreadsheets/d/e/2PACX-1vQLgdf4HJcBCjMIQLWNSTqchySCpzpHIArTWuIwHjYYCV1S4K_j5kDtZ9sp47hDLDPhyHF7D2nXoKdO/pub?gid={gid}&single=true&output=tsv";

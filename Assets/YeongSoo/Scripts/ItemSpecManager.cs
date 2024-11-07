@@ -32,9 +32,9 @@ public static class ItemSpecManager
         {
             // 구글 시트에서 데이터 로드 시도
 
-            for (int i = 0; i <= (int)GoogleSheetLoader.Sheets.GEM; i++)
+            for (int sheetIndex = 0; sheetIndex <= (int)GoogleSheetLoader.Sheets.GEM; sheetIndex++)
             {
-                GoogleSheetLoader.Sheets sheetName = (GoogleSheetLoader.Sheets)i;
+                GoogleSheetLoader.Sheets sheetName = (GoogleSheetLoader.Sheets)sheetIndex;
                 var task = await GoogleSheetLoader.LoadSpecificSheetData(sheetName);
 
                 if (task.success)
